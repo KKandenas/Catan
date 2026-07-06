@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catan Companion</title>
+    <style>
+        :root {
+            --bg-color: #1a1a2e;
+            --card-bg: #16213e;
+            --accent-color: #e94560;
+            --text-color: #e2e8f0;
+            --secondary-btn: #4e5d78;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #8a99ad;
+            margin-bottom: 30px;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: transform 0.1s;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button.secondary {
+            background-color: var(--secondary-btn);
+        }
+
+        /* Tärnings-vy specifik design */
+        .dice-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .die {
+            width: 80px;
+            height: 80px;
+            background: white;
+            color: #333;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .die.red { background: #e94560; color: white; }
+        .die.yellow { background: #f5b041; color: #333; }
+
+        .total-display {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .event-box {
+            background: rgba(255,255,255,0.05);
+            border-left: 4px solid var(--accent-color);
+            padding: 16px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: left;
+            min-height: 80px;
+        }
+
+        .event-title {
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .event-desc {
+            font-size: 14px;
+            color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <div id="menu-view" class="view active">
+        <h1>Catan Companion</h1>
+        <p class="subtitle">Välj ett spelläge för att förnya ön Catan</p>
+        
+        <button onclick="changeView('events-view')">🎲 Event & Katastrofer</button>
+        <button onclick="changeView('quests-view')">📜 Hemliga Uppdrag (Kommande)</button>
+        <button onclick="changeView('market-view')">📉 Digitala Börsen (Kommande)</button>
+    </div>
+
+    <div id="events-view" class="view">
+        <h1>Event & Katastrofer</h1>
+        <p class="subtitle">Slå tärningen i appen – var beredd på allt!</p>
+        
+        <div class="dice-container">
+            <div id="die1" class="die red">-</div>
+            <div id="die2" class="die yellow">-</div>
+        </div>
+
+        <div class="total-display">
+            Summa: <strong id="dice-total">-</strong> (Runda: <span id="round-counter">0</span>)
+        </div>
+
+        <button onclick="rollDice()">Slå tärningar / Nästa runda</button>
+        
+        <div class="event-box">
+            <div id="event-title" class="event-title">Ingen händelse</div>
+            <div id="event-desc" class="event-desc">Spelet har precis börjat. Slå tärningarna för att starta.</div>
+        </div>
+
+        <button class="secondary" style="margin-top: 30px;" onclick="changeView('menu-view')">Tillbaka till menyn</button>
+    </div>
+
+    <div id="quests-view" class="view">
+        <h1>Hemliga Uppdrag</h1>
+        <p class="subtitle">Detta läge är under utveckling.</p>
+        <button class="secondary" onclick="changeView('menu-view')">Tillbaka till menyn</button>
+    </div>
+
+    <div id="market-view" class="view">
+        <h1>Digitala Börsen</h1>
+        <p class="subtitle">Detta läge är under utveckling.</p>
+        <button class="secondary" onclick="changeView('menu-view')">Tillbaka till menyn</button>
+    </div>
+
+</div>
+
+<script>
+    let currentRound = 0;
+    
+    // Lista med events
+    const catanEvents = [
+        { title: "Sjörövarblockad!", desc: "Kusterna är osäkra. Ingen spelare får byta med hamnar under denna runda." },
+        { title: "Goda tider", desc: "Överflöd på ön! Alla som har en bosättning intill en 6:a eller 8:a får omedelbart 1 valfritt råvarukort." },
+        { title: "Gräshoppssvärm", desc: "Katastrof för jordbruket. En slumpmässig vete-bricka blir infekterad och ger ingen skörd denna runda." },
+        { title: "Handelsboom", desc: "Det är lättare att göra affärer. Under denna runda kostar alla interna byten mellan spelare max 1 mot 1." },
+        { title: "Riddarmöte", desc: "Spelaren med det största riddarkortet får stjäla 1 slumpmässigt kort från valfri spelare." },
+        { title: "Lugnet före stormen", desc: "Ingen speciell händelse inträffar denna runda. Bygg i fred." }
+    ];
+
+    // Funktion för att växla mellan vyer (Single Page Application-princip)
+    function changeView(viewId) {
+        document.querySelectorAll('.view').forEach(view => {
+            view.classList.remove('active');
+        });
+        document.getElementById(viewId).classList.add('active');
+    }
+
+    // Tärnings- och eventlogik
+    function rollDice() {
+        currentRound++;
+        document.getElementById('round-counter').innerText = currentRound;
+
+        // Slå två oberoende tärningar för korrekt Catan-sannolikhet (klockkurva)
+        const d1 = Math.floor(Math.random() * 6) + 1;
+        const d2 = Math.floor(Math.random() * 6) + 1;
+        const total = d1 + d2;
+
+        document.getElementById('die1').innerText = d1;
+        document.getElementById('die2').innerText = d2;
+        document.getElementById('dice-total').innerText = total;
+
+        // Logik för händelse-trigger
+        if (total === 7) {
+            triggerEvent("Rövaren aktiveras + Event!", "Rövaren flyttas som vanligt. Dessutom slår vädret om: Alla spelare med fler än 7 kort måste kasta hälften.");
+        } else if (currentRound % 4 === 0) { // Triggar ett slumpmässigt event var 4:e runda
+            const randomIndex = Math.floor(Math.random() * catanEvents.length);
+            const randomEvent = catanEvents[randomIndex];
+            triggerEvent(randomEvent.title, randomEvent.desc);
+        } else {
+            triggerEvent("Vanlig produktion", "Råvaror delas ut som vanligt för nummer " + total + ".");
+        }
+    }
+
+    function triggerEvent(title, desc) {
+        document.getElementById('event-title').innerText = title;
+        document.getElementById('event-desc').innerText = desc;
+    }
+</script>
+
+</body>
+</html>
