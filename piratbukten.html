@@ -321,7 +321,7 @@
             padding: 15px;
             border-radius: 6px;
             color: #4da6ff;
-            line-height: 1.2;
+            line-height: 1.3;
             font-size: 0.85rem;
             margin: 10px 0 15px 0;
             overflow-x: auto;
@@ -417,48 +417,50 @@
         <div class="modal-content">
             <span class="close-modal" onclick="toggleModal(false)">&times;</span>
             
-            <h3>⚓ Rekommenderad Kartuppsättning</h3>
-            <p style="font-size: 0.95rem; margin-bottom: 10px;">För bäst balans, bygg spelplanen enligt denna skiss. Det ska alltid vara **minst 1 havsbricka med vatten** mellan huvudön och småöarna!</p>
+            <h3>⚓ Uppsättning av Spelplanen</h3>
+            <p style="font-size: 0.95rem; margin-bottom: 10px;">Skissen visar principen för upplägget. Huvudön i mitten ska självklart ha en **blandning av alla resurser** (Trä, Lera, Vete, Lamm, Malm) precis som i vanliga Catan.</p>
             
             <div class="map-preview">
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                [Dold Ö 1]        [Dold Ö 2]
-     ~~~~~~~~~~~          ~~~~~~~~         ~~~~~~~~~~~
-    ~            ~~~~~~~~~        ~~~~~~~~~           ~
-   ~             / \ / \ / \ / \                       ~
-  ~             | L | V | T | M |   [Guldgruva]        ~
- ~   [Dold Ö 5]  \ / \ / \ / \ /                        ~
-~                | Lera| H | V |                         ~
- ~                \ / \ / \ / \ /   [Dold Ö 3]          ~
-  ~              | T | M | L |                         ~
-   ~              \ / \ / \ /                          ~
-    ~            ~~~~~~~~~        ~~~~~~~~~           ~
-     ~~~~~~~~~~~          ~~~~~~~~         ~~~~~~~~~~~
-                [Dold Ö 4]       [Guldgruva]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-<span style="color: #b5a494; font-size:0.75rem;">(H = Hamn/Mitten, L = Lamm, V = Vete, T = Trä, M = Malm. Yttre ringen = Hav)</span></div>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    [Dold Ö]                 [Dold Ö]
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       ~                                                   ~
+      ~        (⚓)        (⚓)        (⚓)                    ~
+     ~          / \        / \        / \                   ~
+    ~          |Trä|      |Vete|     |Malm|     [Guldgruva]  ~
+   ~        / \ \ / \  / \ \ / \  / \ \ / \                   ~
+  ~ [Dold]|Lera| |Lamm| |Trä| |Lera| |Vete|                   ~
+   ~        \ / / \ /  \ / / \ /  \ / / \ /   [Dold Ö]        ~
+    ~          |Malm|     |Vete|     |Lamm|                  ~
+     ~          \ /        \ /        \ /                   ~
+      ~        (⚓)        (⚓)        (⚓)                    ~
+       ~                                                   ~
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    [Dold Ö]                [Guldgruva]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<span style="color: #b5a494; font-size:0.75rem;">(⚓ = Hamnar placeras vid huvudöns strandlinje mot havet. Yttre ringen = Rent vatten)</span></div>
 
             <ul>
-                <li><strong>Huvudön (Mitten):</strong> Byggs av **7–9 landbrickor**. Här placerar alla sina 2 starthus. Det blir snabbt trångt, vilket tvingar ut spelarna på havet.</li>
-                <li><strong>Havet:</strong> Ringa in hela huvudön med ett lager av enbart havsbrickor.</li>
-                <li><strong>Dolda småöar:</strong> Placera ut **4–5 småöar** (bestående av 1 eller max 2 landbrickor per ö) i havsringens utkanter. Lägg dessa brickor och deras sifferchips **uppochned**.</li>
-                <li><strong>Guldgruvor:</strong> Lägg gärna 1–2 guldgruvor (från Catan Sjöfarare) allra längst ut i hörnen som "high risk/high reward"-destinationer.</li>
-                <li><strong>Utforskning:</strong> När en spelares båt når en korsning som gränsar till en uppochnedvänd bricka, vänds den och siffran upp direkt.</li>
+                <li><strong>Huvudön (Mitten):</strong> Byggs av **7–9 landbrickor** med en jämn blandning av alla råvaror och sifferchips. Här placerar alla spelare sina 2 starthus helt öppet.</li>
+                <li><strong>Hamnar (⚓):</strong> Läggs ut **längs med huvudöns kust** (pekande ut mot havet) och/eller ute på småöarna. De ska *aldrig* ligga mitt på land.</li>
+                <li><strong>Havsringen:</strong> Omringa hela huvudön med ett sammanhängande bälte av rena havsbrickor. Detta bälte ser till att det alltid krävs minst 1–2 båtar för att nå de dolda skatterna.</li>
+                <li><strong>Dolda småöar:</strong> Placera ut **4–5 småöar** (bestående av 1 eller 2 landbrickor) i havsringens utkanter. Lägg dessa brickor och sifferchips **uppochned**.</li>
+                <li><strong>Guldgruvor:</strong> Lägg gärna till 1–2 guldgruvor allra längst ut i hörnen som extra värdefulla och svårfångade platser.</li>
+                <li><strong>Utforskning:</strong> När en spelares båtlinje når en kustlinje till en dold bricka, vänds landbrickan och dess sifferchip upp. Ön är upptäckt!</li>
             </ul>
 
             <h3>👻 Så fungerar Spökpiraten</h3>
             <ul>
                 <li><strong>Position:</strong> Längst ner i händelserutan ser ni varje runda var piraten befinner sig (t.ex. *"Siktad nära rutor med siffra: 5"*).</li>
-                <li><strong>Blockering:</strong> Piraten blockerar just nu produktionen kring **allt utom huvudön**. Om numret slås får bosättningar intill dolda/upptäckta småöar ute till havs *inga* resurser.</li>
-                <li><strong>Huvudön är säker:</strong> Piraten vågar sig aldrig in till huvudön. Siffran blockerar bara ute på havet.</li>
+                <li><strong>Blockering:</strong> Piraten blockerar just nu produktionen kring **allt utom huvudön**. Om numret slås får bosättningar intill dolda/upptäckta småöar ute till havs *inga* resurser. Huvudön är alltid säker!</li>
                 <li><strong>Strid:</strong> Står du med en båt eller hus intill en ö med den drabbade siffran kan du slåss mot honom via knappen i **Kaptenens Loggbok** för att försöka sänka honom och sno resurser.</li>
-                <li><strong>Om tärningen visar 7:</strong> Då flyttas den fysiska pirat/rövarfiguren på brädet manuellt och man stjäl ett kort från en motspelare som vanligt.</li>
+                <li><strong>Om tärningen visar 7:</strong> Flytta den fysiska pirat/rövarfiguren på brädet manuellt och stjäl ett kort från en motspelare som vanligt.</li>
             </ul>
 
             <h3>🎲 Så här spelar ni rundan</h3>
             <ul>
                 <li><strong>1. Slå i appen:</strong> Tryck på "Slå tärningar". Appen visar resursnumret, slumpar en global händelse samt uppdaterar hamnarnas växelkurser.</li>
-                <li><strong>2. Resurser & Handel:</strong> Alla samlar råvaror (minus piratblockeringen). Aktiv spelare kan handla med banken till de kurser appen visar just nu.</li>
+                <li><strong>2. Resurser & Handel:</strong> Alla samlar råvaror. Aktiv spelare kan handla med banken till de kurser appen visar just nu via hamnar man äger.</li>
                 <li><strong>3. Loggboken:</strong> Du kan betala 1 lamm + 1 vete till banken för att dra en hemlig skattkarta i appen. Kom ihåg att klicka på "Dölj" innan du lämnar över iPaden!</li>
             </ul>
             
