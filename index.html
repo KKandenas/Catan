@@ -335,7 +335,7 @@
                 <li><strong>Setup:</strong> Välj antal spelare i appen innan spelet drar igång.</li>
                 <li><strong>Dra uppdrag:</strong> Skicka runt telefonen. Varje spelare måste hålla in knappen för att läsa sitt eget uppdrag i hemlighet, släppa knappen och skicka vidare.</li>
                 <li><strong>Målet:</strong> Försök uppfylla ditt uppdrag under spelets gång utan att avslöja det för motståndarna.</li>
-                <li><strong>Poäng:</strong> När någon når 10 poäng på brädet avslöjar alla sina uppdrag. Lyckade uppdrag ger +1 poäng till din slutsumma!</li>
+                <li><strong>Poäng:</strong> Lyckade uppdrag ger +1 poäng till din slutsumma!</li>
             </ul>
         </div>
 
@@ -387,10 +387,10 @@
     let currentRound = 0;
     const catanEvents = [
         { title: "Sjörövarblockad!", desc: "Kusterna är osäkra. Ingen spelare får byta med hamnar under denna runda." },
-        { title: "Goda tider", desc: "Överflöd på ön! Alla som har en bosättning intill en 6:a eller 8:a får omedelbart 1 valfritt råvarukort." },
-        { title: "Gräshoppssvärm", desc: "Katastrof för jordbruket. En slumpmässig vete-bricka blir infekterad och ger ingen skörd denna runda." },
+        { title: "Goda tider", desc: "Överflöd på ön! Alla som har en bosättning intill en 6:a eller 8:a får omedelbart 1 valfritt råvarukort (1 kort per byggnad som gränsar)." },
+        { title: "Gräshoppssvärm", desc: "Katastrof för jordbruket. Vete-brickorna är infekterade och ger ingen skörd denna runda." },
         { title: "Arbetarstrejk!", desc: "Under denna runda får ingen bygga nya vägar eller bosättningar. Utvecklingskort och städer är tillåtna." },
-        { title: "Riddarmöte", desc: "Spelaren med det största riddarkortet får stjäla 1 slumpmässigt kort från valfri spelare." },
+        { title: "Riddarmöte", desc: "Spelaren/Spelarna med störst antal riddarkort får stjäla 1 slumpmässigt kort från valfri spelare." },
         { title: "Lugnet före stormen", desc: "Ingen speciell händelse inträffar denna runda. Bygg i fred." }
     ];
 
