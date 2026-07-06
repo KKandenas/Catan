@@ -57,6 +57,14 @@
         header p {
             color: #8bbcd8;
             font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .device-note {
+            font-size: 0.9rem;
+            color: #f5b041;
+            font-style: italic;
+            opacity: 0.9;
         }
 
         .game-grid {
@@ -174,10 +182,12 @@
         <header>
             <h1>🌌 CATAN COMPANION</h1>
             <p>Välj ett scenario för att starta kontrollpanelen och digitalisera spelkvällen</p>
+            <div class="device-note">ℹ️ De tre första varianterna (Meteor, Pirat &amp; Noir) är anpassade för iPad på bordet.</div>
         </header>
 
         <div class="game-grid">
             
+            <!-- Meteor Impact -->
             <a href="meteor.html" class="game-card card-meteor">
                 <div>
                     <div class="game-icon">☄️</div>
@@ -187,6 +197,7 @@
                 <button class="btn-launch">Starta Gränssnitt</button>
             </a>
 
+            <!-- Piratbukten -->
             <a href="piratbukten.html" class="game-card card-pirate">
                 <div>
                     <div class="game-icon">🏴‍☠️</div>
@@ -196,6 +207,7 @@
                 <button class="btn-launch">Starta Gränssnitt</button>
             </a>
 
+            <!-- Catan Noir -->
             <a href="catannoir.html" class="game-card card-noir">
                 <div>
                     <div class="game-icon">🕵️‍♂️</div>
@@ -205,6 +217,7 @@
                 <button class="btn-launch">Starta Gränssnitt</button>
             </a>
 
+            <!-- Catan Classic Expansion Menus -->
             <a href="games.html" class="game-card card-comp">
                 <div>
                     <div class="game-icon">🎲</div>
