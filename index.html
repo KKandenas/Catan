@@ -132,6 +132,45 @@
             font-size: 14px;
             color: #bdc3c7;
         }
+
+       /* Börs-vy specifikt */
+        #market-board {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .market-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-size: 18px;
+        }
+
+        .resource-name {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .market-rate {
+            font-family: monospace;
+            font-size: 22px;
+            font-weight: bold;
+            background: #1a1a2e;
+            padding: 4px 12px;
+            border-radius: 6px;
+            color: #f5b041;
+        }
+
+        .trend-up { color: #e94560; } /* Dyrare = rött/dåligt för köparen */
+        .trend-down { color: #0f9652; } /* Billigare = grönt/bra! */
+        .trend-stable { color: #8a99ad; }      
     </style>
 </head>
 <body>
@@ -176,10 +215,17 @@
         <button class="secondary" onclick="changeView('menu-view')">Tillbaka till menyn</button>
     </div>
 
+    <!-- 4. LÄGE: DIGITALA BÖRSEN -->
     <div id="market-view" class="view">
         <h1>Digitala Börsen</h1>
-        <p class="subtitle">Detta läge är under utveckling.</p>
-        <button class="secondary" onclick="changeView('menu-view')">Tillbaka till menyn</button>
+        <p class="subtitle">Kurserna visar vad banken kräver för 1 valfri råvara</p>
+       
+        <div id="market-board">
+            <!-- Här kommer kurserna att ritas ut av JavaScript -->
+        </div>
+
+        <button style="margin-top: 20px;" onclick="updateMarket()">Nästa runda / Uppdatera kurser</button>
+        <button class="secondary" style="margin-top: 10px;" onclick="changeView('menu-view')">Tillbaka till menyn</button>
     </div>
 
 </div>
@@ -225,7 +271,7 @@ function rollDice() {
         triggerEvent("Rövaren aktiveras + Event!", "Rövaren flyttas som vanligt. Dessutom slår vädret om: Alla spelare med fler än 7 kort måste kasta hälften.");
     }
     // 2. Om det INTE blev en 7:a, kolla om vi ska slumpa fram ett event (25% chans = snitt var 4:e runda)
-    else if (Math.random() < 0.25) {
+    else if (Math.random() < 0.33) {
         const randomIndex = Math.floor(Math.random() * catanEvents.length);
         const randomEvent = catanEvents[randomIndex];
         triggerEvent(randomEvent.title, randomEvent.desc);
@@ -239,6 +285,73 @@ function rollDice() {
     function triggerEvent(title, desc) {
         document.getElementById('event-title').innerText = title;
         document.getElementById('event-desc').innerText = desc;
+    }
+       // Startpriser och emojier för alla råvaror
+    let marketData = {
+        "Trä":  { rate: 3, trend: "▬", emoji: "🌲" },
+        "Lera": { rate: 3, trend: "▬", emoji: "🧱" },
+        "Får":  { rate: 3, trend: "▬", emoji: "🐑" },
+        "Vete": { rate: 3, trend: "▬", emoji: "🌾" },
+        "Malm": { rate: 3, trend: "▬", emoji: "🪨" }
+    };
+
+    // Funktion för att rita ut börsen på skärmen
+    function renderMarket() {
+        const board = document.getElementById('market-board');
+        board.innerHTML = ""; // Rensa skärmen först
+
+        for (const [resource, data] of Object.entries(marketData)) {
+            let trendClass = "trend-stable";
+            if (data.trend === "🔺") trendClass = "trend-up";
+            if (data.trend === "🔻") trendClass = "trend-down";
+
+            board.innerHTML += `
+                <div class="market-row">
+                    <span class="resource-name">${data.emoji} ${resource}</span>
+                    <span class="${trendClass}" style="font-size: 14px;">${data.trend}</span>
+                    <span class="market-rate">${data.rate}:1</span>
+                </div>
+            `;
+        }
+    }
+
+    // Funktion som slumpar nya kurser
+    function updateMarket() {
+        for (const resource in marketData) {
+            const currentRate = marketData[resource].rate;
+           
+            // Slumpa förändring: -1 (billigare), 0 (samma), eller +1 (dyrare)
+            const change = Math.floor(Math.random() * 3) - 1;
+            let newRate = currentRate + change;
+
+            // Håll kurserna inom rimliga gränser (mellan 2:1 och 5:1)
+            if (newRate < 2) newRate = 2;
+            if (newRate > 5) newRate = 5;
+
+            // Sätt trendpil baserat på förändringen
+            if (newRate > currentRate) {
+                marketData[resource].trend = "🔺 (Dyrare)";
+            } else if (newRate < currentRate) {
+                marketData[resource].trend = "🔻 (Billigare!)";
+            } else {
+                marketData[resource].trend = "▬";
+            }
+
+            marketData[resource].rate = newRate;
+        }
+
+        // Rita ut den uppdaterade börsen
+        renderMarket();
+    }
+
+    // Vi måste se till att börsen ritas ut första gången man öppnar den
+    // Så vi modifierar din befintliga changeView-funktion lite grann:
+    const originalChangeView = changeView;
+    changeView = function(viewId) {
+        originalChangeView(viewId);
+        if (viewId === 'market-view') {
+            renderMarket(); // Initiera börsen när man klickar in
+        }
     }
 </script>
 
