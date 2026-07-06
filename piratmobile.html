@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piratbukten - Kaptenspanel</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            background-color: #0b132b;
+            color: #fff;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .mobile-container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h2 { color: #ff3344; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
+        .input-group { margin-bottom: 20px; width: 100%; }
+        input {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            border-radius: 12px;
+            border: 2px solid #1c2541;
+            background: #1c2541;
+            color: white;
+            text-align: center;
+            box-sizing: border-box;
+            text-transform: uppercase;
+        }
+        button {
+            width: 100%;
+            background: #ff3344;
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 51, 68, 0.3);
+            margin-top: 10px;
+        }
+        button:active { transform: scale(0.98); }
+        .hidden { display: none; }
+        .card { background: rgba(28, 37, 65, 0.6); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-container">
+        
+        <!-- INLOGGNINGSVY -->
+        <div id="login-view">
+            <h2>Ange Rumskod</h2>
+            <div class="input-group">
+                <input type="text" id="room-code-input" placeholder="T.EX. PIRAT" autocomplete="off">
+            </div>
+            <button onclick="loginToRoom()">Logga in på skutan</button>
+        </div>
+
+        <!-- KONTROLLERMANU -->
+        <div id="control-view" class="hidden">
+            <h2>Kaptenspanel 🏴‍☠️</h2>
+            <p style="color: #64dfdf; margin-bottom: 20px;">Ansluten till rummet!</p>
+            
+            <button onclick="rollPirateDice()" style="background: #ffb703; color: #0b132b; box-shadow: 0 4px 15px rgba(255, 183, 3, 0.3);">🎲 Slå tärningar &amp; händelse</button>
+            
+            <div class="card">
+                <p style="margin-bottom: 0; font-size: 0.9rem; color: #a5a5a5;">Ditt dolda piratuppdrag:</p>
+                <p style="font-weight: bold; margin-top: 8px; color: #48cae4;">Smuggla lera: Äg en hamn och ha 3 lerkort på handen samtidigt för att få +1 poäng vid spelets slut.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. BYT UT DESSA MOT SAMMA SUPABASE-UPPGIFTER SOM I BOARD-FILEN
+        const supabaseUrl = 'https://vyyubyujhyljrwamdbmc.supabase.co/rest/v1/';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5eXVieXVqaHlsanJ3YW1kYm1jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzNjYyMTcsImV4cCI6MjA5ODk0MjIxN30.efX8kjRFPFmA0JPkWcw4ZOs-inMAz47eckf8shVNuaM';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        let activeRoom = '';
+
+        function loginToRoom() {
+            const input = document.getElementById('room-code-input').value.trim().toUpperCase();
+            if (input === 'PIRAT') {
+                activeRoom = input;
+                document.getElementById('login-view').classList.add('hidden');
+                document.getElementById('control-view').classList.remove('hidden');
+            } else {
+                alert('Fel rumskod! Skriv PIRAT');
+            }
+        }
+
+        const piratEvents = [
+            { title: "⚓ Stiltje på havet", desc: "Ingen vind i seglen! Spelare får inte handla med banken eller hamnar under denna runda." },
+            { title: "🌊 Stormvarning!", desc: "En plötslig storm drar in. Alla spelare som har bosättningar eller städer intill ett havsfält måste slumpmässigt slänga 1 råvarukort." },
+            { title: "💰 Kunglig tullrabatt", desc: "Tullarna tar helg! Under denna runda kostar det bara 2:1 att byta bort valfri råvara hos banken." }
+        ];
+
+        async function rollPirateDice() {
+            const d1 = Math.floor(Math.random() * 6) + 1;
+            const d2 = Math.floor(Math.random() * 6) + 1;
+            const total = d1 + d2;
+
+            let eventTitle = "Vanligt väder";
+            let eventDesc = `Råvaror delas ut som vanligt för nummer ${total}.`;
+
+            if (total === 7) {
+                eventTitle = "🏴‍☠️ PIRATERNA ANFALLER! (7)";
+                eventDesc = "Flytta rövaren/piraten till ett nytt fält. Alla kaptener med fler än 7 kort på handen tvingas slänga hälften i sjön!";
+            } else if (Math.random() < 0.4) { // 40% chans för ett pirat-event
+                const randomEv = piratEvents[Math.floor(Math.random() * piratEvents.length)];
+                eventTitle = randomEv.title;
+                eventDesc = randomEv.desc;
+            }
+
+            // Skicka upp det nya tillståndet till Supabase live!
+            const { error } = await supabase
+                .from('pirate_rooms')
+                .update({ 
+                    dice_total: total, 
+                    current_event: eventTitle, 
+                    event_desc: eventDesc 
+                })
+                .eq('id', activeRoom);
+                
+            if(error) console.error("Kunde inte skicka data:", error);
+        }
+    </script>
+</body>
+</html>
