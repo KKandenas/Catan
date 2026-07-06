@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Piratbukten - Kaptenspanel</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
         body {
             background-color: #0b132b;
@@ -53,22 +53,37 @@
         button:active { transform: scale(0.98); }
         .hidden { display: none; }
         .card { background: rgba(28, 37, 65, 0.6); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); margin-top: 20px; }
+        
+        /* Felsökningslåda */
+        #debug-box {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(255, 0, 0, 0.15);
+            border: 1px solid #ff3344;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            text-align: left;
+            max-height: 150px;
+            overflow-y: auto;
+            color: #ff9999;
+            width: 100%;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
 
     <div class="mobile-container">
         
-        <!-- INLOGGNINGSVY -->
         <div id="login-view">
             <h2>Ange Rumskod</h2>
             <div class="input-group">
-                <input type="text" id="room-code-input" placeholder="T.EX. PIRAT" autocomplete="off">
+                <input type="text" id="room-code-input" placeholder="SKRIV PIRAT" autocomplete="off">
             </div>
             <button onclick="loginToRoom()">Logga in på skutan</button>
         </div>
 
-        <!-- KONTROLLERMANU -->
         <div id="control-view" class="hidden">
             <h2>Kaptenspanel 🏴‍☠️</h2>
             <p style="color: #64dfdf; margin-bottom: 20px;">Ansluten till rummet!</p>
@@ -81,24 +96,65 @@
             </div>
         </div>
 
+        <div id="debug-box">Systemstatus: Väntar på inloggning...</div>
+
     </div>
 
     <script>
-        // 1. BYT UT DESSA MOT SAMMA SUPABASE-UPPGIFTER SOM I BOARD-FILEN
+        // Felsökningsfunktion
+        function logDebug(msg, isError = false) {
+            const box = document.getElementById('debug-box');
+            if (isError) {
+                box.style.background = "rgba(255, 0, 0, 0.3)";
+                box.innerHTML = "<strong>FEL:</strong> " + msg;
+            } else {
+                box.innerHTML = "Status: " + msg;
+            }
+        }
+
+        // Catcha globala fel automatiskt
+        window.onerror = function(message, source, lineno, colno, error) {
+            logDebug(message + " (Rad " + lineno + ")", true);
+            return false;
+        };
+
+        // 1. KLISTRA IN DINA UPPGIFTER HÄR (Se till att avsluta URL med .co)
         const supabaseUrl = 'https://vyyubyujhyljrwamdbmc.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5eXVieXVqaHlsanJ3YW1kYm1jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzNjYyMTcsImV4cCI6MjA5ODk0MjIxN30.efX8kjRFPFmA0JPkWcw4ZOs-inMAz47eckf8shVNuaM';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
+        
+        let supabase = null;
         let activeRoom = '';
 
+        // Initiera Supabase säkert
+        try {
+            if (typeof supabase !== 'undefined' && supabase.createClient) {
+                supabase = supabase.createClient(supabaseUrl, supabaseKey);
+                logDebug("Supabase-klienten laddad. Redo för inloggning.");
+            } else {
+                // Om unpkg används istället för jsdelivr ligger det ibhand under fönsterobjektet
+                supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+                logDebug("Supabase-klienten laddad via reservmetod.");
+            }
+        } catch(e) {
+            logDebug("Kunde inte starta Supabase. Kolla dina nycklar och citattecken! " + e.message, true);
+        }
+
         function loginToRoom() {
+            logDebug("Försöker logga in...");
             const input = document.getElementById('room-code-input').value.trim().toUpperCase();
+            
+            if (!supabase) {
+                logDebug("Kan inte logga in eftersom Supabase-anslutningen saknas.", true);
+                return;
+            }
+
             if (input === 'PIRAT') {
                 activeRoom = input;
                 document.getElementById('login-view').classList.add('hidden');
                 document.getElementById('control-view').classList.remove('hidden');
+                logDebug("Inloggad i rummet PIRAT. Väntar på tärningsslag.");
             } else {
-                alert('Fel rumskod! Skriv PIRAT');
+                logDebug("Fel rumskod angiven. Skriv PIRAT.", true);
             }
         }
 
@@ -109,6 +165,7 @@
         ];
 
         async function rollPirateDice() {
+            logDebug("Rullar tärningar...");
             const d1 = Math.floor(Math.random() * 6) + 1;
             const d2 = Math.floor(Math.random() * 6) + 1;
             const total = d1 + d2;
@@ -119,23 +176,32 @@
             if (total === 7) {
                 eventTitle = "🏴‍☠️ PIRATERNA ANFALLER! (7)";
                 eventDesc = "Flytta rövaren/piraten till ett nytt fält. Alla kaptener med fler än 7 kort på handen tvingas slänga hälften i sjön!";
-            } else if (Math.random() < 0.4) { // 40% chans för ett pirat-event
+            } else if (Math.random() < 0.4) {
                 const randomEv = piratEvents[Math.floor(Math.random() * piratEvents.length)];
                 eventTitle = randomEv.title;
                 eventDesc = randomEv.desc;
             }
 
-            // Skicka upp det nya tillståndet till Supabase live!
-            const { error } = await supabase
-                .from('pirate_rooms')
-                .update({ 
-                    dice_total: total, 
-                    current_event: eventTitle, 
-                    event_desc: eventDesc 
-                })
-                .eq('id', activeRoom);
-                
-            if(error) console.error("Kunde inte skicka data:", error);
+            logDebug(`Slog ${total}. Skickar till databasen...`);
+
+            try {
+                const { error } = await supabase
+                    .from('pirate_rooms')
+                    .update({ 
+                        dice_total: total, 
+                        current_event: eventTitle, 
+                        event_desc: eventDesc 
+                    })
+                    .eq('id', activeRoom);
+                    
+                if(error) {
+                    logDebug("Databasfel: " + error.message, true);
+                } else {
+                    logDebug(`Lyckades! Skickade tärningssumma ${total} till iPaden.`);
+                }
+            } catch(e) {
+                logDebug("Nätverksfel eller databaskrasch: " + e.message, true);
+            }
         }
     </script>
 </body>
