@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catan: Meteor Impact</title>
+    <style>
+        :root {
+            --space-bg: #060913;
+            --radar-green: #00ff66;
+            --alert-red: #ff3333;
+            --panel-blue: #111a2e;
+            --text-color: #33e1ff;
+            --border-color: #1f355e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--space-bg);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Sci-Fi Header */
+        header {
+            background-color: var(--panel-blue);
+            padding: 10px 20px;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(0, 225, 255, 0.2);
+        }
+
+        header h1 {
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        /* Nytt Layout-koncept: Kontrollrumspanel */
+        .control-room {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+            height: calc(100vh - 55px);
+        }
+
+        /* VÄNSTER PANEL: STATUS & TÄRNINGAR */
+        .side-panel {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sci-fi-box {
+            background-color: rgba(17, 26, 46, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: inset 0 0 15px rgba(31, 53, 94, 0.5);
+        }
+
+        .flex-grow { flex: 1; display: flex; flex-direction: column; }
+
+        /* RADAR-CENTER (Helt olikt de förra apparna) */
+        .radar-center {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .radar-screen {
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            position: relative;
+            background: radial-gradient(circle, #0c162b 0%, #050811 100%);
+            box-shadow: 0 0 40px rgba(31, 53, 94, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Pulserande svep på radarn */
+        .radar-sweep {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 255, 102, 0.15) 0%, transparent 50%);
+            transform-origin: center;
+            animation: sweep 4s linear infinite;
+        }
+
+        @keyframes sweep {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .radar-grid {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border: 1px dashed rgba(31, 53, 94, 0.6);
+            border-radius: 50%;
+        }
+        .radar-grid-inner {
+            position: absolute;
+            width: 40%;
+            height: 40%;
+            border: 1px dashed rgba(31, 53, 94, 0.4);
+            border-radius: 50%;
+        }
+
+        /* Meteoren på radarn */
+        .meteor-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--alert-red);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--alert-red);
+            transition: all 1s ease-out;
+            z-index: 10;
+        }
+
+        /* Stor Display för avstånd */
+        .distance-display {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .distance-val {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        /* Tärningsmekanik */
+        .dice-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .die {
+            width: 55px;
+            height: 55px;
+            background-color: var(--panel-blue);
+            border: 2px solid var(--text-color);
+            color: #fff;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        /* Knappar */
+        .btn {
+            background-color: #1f355e;
+            color: #fff;
+            border: 1px solid var(--text-color);
+            padding: 12px;
+            font-size: 0.95rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+        }
+        .btn:active { background-color: var(--panel-blue); }
+        .btn-alert { background-color: var(--alert-red); border-color: #ff6666; }
+
+        /* Loggskärm */
+        .log-screen {
+            flex: 1;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #8bbcd8;
+            overflow-y: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+            white-space: pre-line;
+        }
+
+        /* Popups vid kollision */
+        .impact-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(255, 51, 51, 0.2);
+            animation: flash 0.5s infinite alternate;
+            z-index: 100;
+            pointer-events: none;
+        }
+        @keyframes flash {
+            from { background-color: rgba(255, 51, 51, 0.3); }
+            to { background-color: rgba(255, 51, 51, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="impact-overlay" id="alert-flash"></div>
+
+    <header>
+        <h1>☄️ CATAN: METEOR DEFENSE SYSTEM</h1>
+        <div style="font-size: 0.85rem; color: var(--radar-green);">● SYSTEM ONLINE</div>
+    </header>
+
+    <div class="control-room">
+        
+        <!-- VÄNSTER SIDA: KONTROLLER & STATUS -->
+        <div class="side-panel">
+            <div class="sci-fi-box">
+                <h3 style="font-size:0.9rem; text-transform:uppercase; margin-bottom:5px;">Skanna Omloppsbana</h3>
+                <div class="dice-container">
+                    <div id="die1" class="die">?</div>
+                    <div id="die2" class="die">?</div>
+                </div>
+                <button class="btn btn-alert" onclick="scanOrbit()">Slå & Beräkna Bana</button>
+            </div>
+
+            <div class="sci-fi-box flex-grow">
+                <h3 style="font-size:0.9rem; text-transform:uppercase; margin-bottom:10px;">防 Telemetrilogg</h3>
+                <div class="log-screen" id="log-text">
+                    [SYSTEM STARTAT] 
+                    Väntar på första banberäkningen...
+                </div>
+            </div>
+        </div>
+
+        <!-- HÖGER/MITTEN: RADARSKÄRMEN -->
+        <div class="radar-center">
+            <div class="radar-screen">
+                <div class="radar-sweep"></div>
+                <div class="radar-grid"></div>
+                <div class="radar-grid-inner"></div>
+                <!-- Jordens/Catans mittpunkt -->
+                <div style="position:absolute; width:12px; height:12px; background:#33e1ff; border-radius:50%; box-shadow:0 0 10px #33e1ff;"></div>
+                <!-- Meteoren som rör sig -->
+                <div id="meteor" class="meteor-dot" style="top: 40px; left: 190px;"></div>
+            </div>
+
+            <div class="distance-display">
+                <p style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-dim);">Distans till kollision</p>
+                <div class="distance-val" id="distance-output">35 000 km</div>
+            </div>
+
+            <!-- Globala Försvarsåtgärder (Samarbetsknappar) -->
+            <div style="display: flex; gap: 15px; width: 60%; margin-top: 20px;">
+                <button class="btn" style="border-color:var(--radar-green); color:var(--radar-green);" onclick="activateLaser()">📡 Avfyrar Laser <br><span style="font-size:0.7rem;">(Kostar 2 Malm)</span></button>
+                <button class="btn" style="border-color:#ffcc00; color:#ffcc00;" onclick="buildBunker()">🛡️ Sköldkupol <br><span style="font-size:0.7rem;">(Kostar 1 Malm + 1 Lera)</span></button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let distance = 35000;
+        const logElement = document.getElementById('log-text');
+        const meteorElement = document.getElementById('meteor');
+
+        // Meteorns koordinat-steg närmare mitten (200, 200)
+        const meteorSteps = [
+            { top: "40px", left: "190px" },
+            { top: "80px", left: "140px" },
+            { top: "110px", left: "230px" },
+            { top: "150px", left: "160px" },
+            { top: "175px", left: "210px" }
+        ];
+        let currentStep = 0;
+
+        function scanOrbit() {
+            // Tärningar
+            const d1 = Math.floor(Math.random() * 6) + 1;
+            const d2 = Math.floor(Math.random() * 6) + 1;
+            const total = d1 + d2;
+
+            document.getElementById('die1').innerText = d1;
+            document.getElementById('die2').innerText = d2;
+
+            // Minska distans
+            distance -= 5000;
+            if (distance <= 0) {
+                triggerImpact();
+            } else {
+                document.getElementById('distance-output').innerText = distance.toLocaleString() + " km";
+                
+                // Flytta pricken på radarn
+                if (currentStep < meteorSteps.length - 1) {
+                    currentStep++;
+                    meteorElement.style.top = meteorSteps[currentStep].top;
+                    meteorElement.style.left = meteorSteps[currentStep].left;
+                }
+
+                // Logga händelsen
+                let logMsg = `\n[TÄRNING: ${total}] Avstånd minskar!`;
+                if (total === 7) {
+                    logMsg += `\n⚠️ SOLSTORM: Elektroniken slås ut. Ingen handel med hamnar denna runda!`;
+                } else if (total === 2 || total === 12) {
+                    logMsg += `\n☄️ FÖRNOTIS: Kosmiskt damm blockerar siffra [${total}]. Inga resurser där nu.`;
+                } else {
+                    logMsg += `\nNormal resursfördelning för siffra ${total}.`;
+                }
+
+                logElement.innerText = logMsg + "\n" + logElement.innerText;
+            }
+        }
+
+        function triggerImpact() {
+            document.getElementById('distance-output').innerText = "IMPACT NEGLIGIBLE / COLLISION";
+            document.getElementById('alert-flash').style.display = "block";
+            
+            const targetSector = [2, 3, 4, 5, 6, 8, 9, 10, 11, 12][Math.floor(Math.random() * 10)];
+            
+            logElement.innerHTML = `<span style="color:var(--alert-red); font-weight:bold;">💥 KOLLISION BEKRÄFTAD!\nEn meteorit har slagit ner i sektor [${targetSector}].\nVÄND UPP OCH NED på alla landbrickor med siffra ${targetSector} på brädet. De är permanent förstörda!</span>\n\n` + logElement.innerHTML;
+
+            // Återställ till nästa meteor
+            distance = 35000;
+            currentStep = 0;
+            meteorElement.style.top = meteorSteps[0].top;
+            meteorElement.style.left = meteorSteps[0].left;
+            
+            setTimeout(() => {
+                document.getElementById('alert-flash').style.display = "none";
+            }, 3000);
+        }
+
+        function activateLaser() {
+            distance += 5000;
+            if (distance > 35000) distance = 35000;
+            document.getElementById('distance-output').innerText = distance.toLocaleString() + " km";
+            
+            if (currentStep > 0) {
+                currentStep--;
+                meteorElement.style.top = meteorSteps[currentStep].top;
+                meteorElement.style.left = meteorSteps[currentStep].left;
+            }
+
+            logElement.innerHTML = `<span style="color:var(--radar-green);">📡 LASER AVFYRAD!\nMeteoren har knuffats tillbaka i banan (+5 000 km).</span>\n` + logElement.innerHTML;
+        }
+
+        function buildBunker() {
+            logElement.innerHTML = `<span style="color:#ffcc00;">🛡️ SKÖLDKUPOL AKTIVERAD!\nVälj en valfri korsning (by/stad) på brädet. Den skyddas nu mot framtida meteoritnedslag.</span>\n` + logElement.innerHTML;
+        }
+    </script>
+</body>
+</html>
