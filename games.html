@@ -22,7 +22,6 @@
 
         body {
             background-color: var(--bg-color);
-            /* Dynamisk bakgrundstoning som ändras via JS */
             background-image: radial-gradient(circle at 50% 20%, #1f2d5a 0%, #0f111a 80%);
             background-attachment: fixed;
             color: var(--text-color);
@@ -98,7 +97,6 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
 
-        /* Tärnings-design */
         .dice-container {
             display: flex;
             justify-content: center;
@@ -132,7 +130,6 @@
             display: inline-block;
         }
 
-        /* Boxar för info/events/uppdrag */
         .event-box {
             background: rgba(255, 255, 255, 0.07);
             border-left: 4px solid var(--accent-color);
@@ -157,7 +154,6 @@
             line-height: 1.4;
         }
 
-        /* Börs-design */
         #market-board {
             display: flex;
             flex-direction: column;
@@ -198,7 +194,6 @@
         .trend-down { color: #10b981; font-weight: bold; }
         .trend-stable { color: #a0aec0; }
 
-        /* Instruktions-flikar */
         .tabs-container {
             display: flex;
             gap: 6px;
@@ -252,18 +247,17 @@
 
 <div class="app-container">
     
-    <!-- 1. STARTMENY -->
     <div id="menu-view" class="view active">
-        <h1>Catan Companion</h1>
+        <h1>Catan Classic+</h1>
         <p class="subtitle">Välj ett spelläge för att förnya ön Catan</p>
         
         <button onclick="changeView('events-view')">🎲 Event & Katastrofer</button>
         <button onclick="changeView('quests-view')">📜 Hemliga Uppdrag</button>
         <button onclick="changeView('market-view')">📉 Digitala Börsen</button>
-        <button class="secondary" style="margin-top: 20px;" onclick="changeView('instructions-view')">📖 Spelinstruktioner</button>
+        <button class="secondary" onclick="changeView('instructions-view')">📖 Spelinstruktioner</button>
+        <button class="secondary" style="margin-top: 15px; background-color: #111a2e; border: 1px solid #1f355e;" onclick="window.location.href='index.html'">🌌 Tillbaka till portalen</button>
     </div>
 
-    <!-- 2. LÄGE: EVENT & KATASTROFER -->
     <div id="events-view" class="view">
         <h1>Event & Katastrofer</h1>
         <p class="subtitle">Slå tärningen – var beredd på händelser!</p>
@@ -287,7 +281,6 @@
         <button class="secondary" style="margin-top: 30px;" onclick="changeView('menu-view')">Tillbaka till menyn</button>
     </div>
 
-    <!-- 3. LÄGE: HEMLIGA UPPDRAG -->
     <div id="quests-view" class="view">
         <h1>Hemliga Uppdrag</h1>
         <p class="subtitle">Skicka runt telefonen och kika i smyg</p>
@@ -313,7 +306,6 @@
         <button class="secondary" style="margin-top: 30px;" onclick="resetQuestsView()">Tillbaka till menyn</button>
     </div>
 
-    <!-- 4. LÄGE: DIGITALA BÖRSEN -->
     <div id="market-view" class="view">
         <h1>Digitala Börsen</h1>
         <p class="subtitle">Kurserna visar vad banken kräver för 1 valfri råvara</p>
@@ -327,14 +319,12 @@
         </div>
 
         <div id="market-board">
-            <!-- Kurserna ritas ut här -->
-        </div>
+            </div>
 
         <button onclick="rollMarketDice()">Slå tärningar & Uppdatera kurser</button>
         <button class="secondary" style="margin-top: 10px;" onclick="changeView('menu-view')">Tillbaka till menyn</button>
     </div>
 
-    <!-- 5. LÄGE: INSTRUKTIONER -->
     <div id="instructions-view" class="view">
         <h1>Spelinstruktioner</h1>
         <p class="subtitle">Hur man spelar de olika tilläggen</p>
@@ -390,17 +380,16 @@
         });
         document.getElementById(viewId).classList.add('active');
         
-        // Uppdatera bakgrundsbilden beroende på aktiv vy
         const body = document.body;
         if (viewId === 'events-view') {
-            body.style.backgroundImage = "radial-gradient(circle at 50% 20%, #4a1525 0%, #110509 80%)"; // Eldig/Katastrof-röd
+            body.style.backgroundImage = "radial-gradient(circle at 50% 20%, #4a1525 0%, #110509 80%)";
         } else if (viewId === 'quests-view') {
-            body.style.backgroundImage = "radial-gradient(circle at 50% 20%, #2c1a4d 0%, #0d071a 80%)"; // Mystisk/Uppdrags-lila
+            body.style.backgroundImage = "radial-gradient(circle at 50% 20%, #2c1a4d 0%, #0d071a 80%)";
         } else if (viewId === 'market-view') {
-            body.style.backgroundImage = "radial-gradient(circle at 50% 20%, #064e3b 0%, #02110d 80%)"; // Börs/Finans-grön
+            body.style.backgroundImage = "radial-gradient(circle at 50% 20%, #064e3b 0%, #02110d 80%)";
             renderMarket();
         } else {
-            body.style.backgroundImage = "radial-gradient(circle at 50% 20%, #1f2d5a 0%, #0f111a 80%)"; // Standard guld/blå
+            body.style.backgroundImage = "radial-gradient(circle at 50% 20%, #1f2d5a 0%, #0f111a 80%)";
         }
     }
 
@@ -452,7 +441,7 @@
             document.getElementById('event-desc').innerText = randomEvent.desc;
         } else {
             document.getElementById('event-title').innerText = "Vanlig produktion";
-            document.getElementById('event-desc').innerText = "Råvaror delas ut som vanligt för nummer " + total + ".";
+            document.getElementById('event-desc').innerText = "Råvaror delas ut som vanligt for nummer " + total + ".";
         }
     }
 
@@ -506,7 +495,6 @@
         document.getElementById('quest-text').style.filter = "blur(5px)";
     }
 
-    // Fix för mobiler så att man inte tappar fokus när man drar med fingret
     window.addEventListener('mouseup', hideQuest);
     window.addEventListener('touchend', hideQuest);
 
