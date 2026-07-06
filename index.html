@@ -210,9 +210,32 @@
     </div>
 
     <div id="quests-view" class="view">
+ <!-- 3. LÄGE: HEMLIGA UPPDRAG -->
+    <div id="quests-view" class="view">
         <h1>Hemliga Uppdrag</h1>
-        <p class="subtitle">Detta läge är under utveckling.</p>
-        <button class="secondary" onclick="changeView('menu-view')">Tillbaka till menyn</button>
+        <p class="subtitle">Skicka runt telefonen och kika på ditt dolda uppdrag</p>
+       
+        <div id="setup-quests">
+            <p style="margin-bottom: 15px;">Hur många spelare är ni?</p>
+            <button class="secondary" onclick="startQuestsGame(3)">3 Spelare</button>
+            <button class="secondary" onclick="startQuestsGame(4)">4 Spelare</button>
+        </div>
+
+        <div id="active-quests" style="display: none;">
+            <h2 id="current-player-title" style="margin-bottom: 20px; color: #f5b041;">Spelare 1</h2>
+           
+            <div id="quest-content-box" class="event-box" style="text-align: center; font-size: 18px; min-height: 120px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <span id="quest-text" style="filter: blur(5px); transition: filter 0.2s;">Klicka nedan för att se uppdrag</span>
+            </div>
+
+            <button id="toggle-quest-btn" onmousedown="showQuest()" onmouseup="hideQuest()" ontouchstart="showQuest()" ontouchend="hideQuest()">HÅLL IN FÖR ATT VISA</button>
+           
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="secondary" onclick="nextPlayerQuest()">Nästa spelare ➡️</button>
+            </div>
+        </div>
+
+        <button class="secondary" style="margin-top: 30px;" onclick="resetQuestsView()">Tillbaka till menyn</button>
     </div>
 
     <!-- 4. LÄGE: DIGITALA BÖRSEN -->
@@ -352,6 +375,79 @@ function rollDice() {
         if (viewId === 'market-view') {
             renderMarket(); // Initiera börsen när man klickar in
         }
+    }
+      // Lista med unika dolda uppdrag
+    const catanQuests = [
+        "Monopolist: Ha tre bosättningar eller städer runt samma råvarutyp. (Ger +1 poäng i slutet)",
+        "Fredsmäklare: Genomför minst tre byten med tre olika spelare under spelets gång. (Ger +1 poäng i slutet)",
+        "Långbänk: Bygg en obruten väg på minst 8 segment innan du bygger din nästa stad. (Ger +1 poäng i slutet)",
+        "Miljonär: Ha 10 eller fler råvarukort på handen samtidigt utan att rövaren tar dem. (Ger +1 poäng i slutet)",
+        "Skattejagare: Köp 3 utvecklingskort innan du bygger din första stad. (Ger +1 poäng i slutet)",
+        "Skogshuggare: Ha bosättningar vid två olika skogsbrickor (Trä) samtidigt. (Ger +1 poäng i slutet)",
+        "Bergskung: Äg två städer som båda gränsar till en malmbricka (Fjäll). (Ger +1 poäng i slutet)",
+        "Oas: Bygg en bosättning eller stad som gränsar direkt till öknen. (Ger +1 poäng i slutet)"
+    ];
+
+    let playerQuests = []; // Håller koll på vilken spelare som fick vilket uppdrag
+    let currentQuestPlayerIndex = 0;
+    let totalQuestPlayers = 0;
+
+    // Startar uppdrags-läget och slumpar fram uppdrag till spelarna
+    function startQuestsGame(numPlayers) {
+        totalQuestPlayers = numPlayers;
+        playerQuests = [];
+        currentQuestPlayerIndex = 0;
+
+        // Kopiera uppdragslistan så vi kan plocka bort använda uppdrag (inga dubbletter)
+        let availableQuests = [...catanQuests];
+
+        for (let i = 0; i < numPlayers; i++) {
+            const randomIndex = Math.floor(Math.random() * availableQuests.length);
+            // Spara uppdraget och ta bort det från de tillgängliga
+            playerQuests.push(availableQuests.splice(randomIndex, 1)[0]);
+        }
+
+        // Byt gränssnitt från setup till aktivt spel
+        document.getElementById('setup-quests').style.display = 'none';
+        document.getElementById('active-quests').style.display = 'block';
+        updateQuestPlayerUI();
+    }
+
+    // Uppdaterar texten för vilken spelare det är
+    function updateQuestPlayerUI() {
+        document.getElementById('current-player-title').innerText = "Spelare " + (currentQuestPlayerIndex + 1);
+        document.getElementById('quest-text').innerText = "Klicka nedan för att se uppdrag";
+        document.getElementById('quest-text').style.filter = "blur(5px)";
+    }
+
+    // Visar uppdraget (när man håller in knappen)
+    function showQuest() {
+        if (playerQuests.length > 0) {
+            document.getElementById('quest-text').innerText = playerQuests[currentQuestPlayerIndex];
+            document.getElementById('quest-text').style.filter = "blur(0px)";
+        }
+    }
+
+    // Döljer uppdraget igen (när man släpper knappen)
+    function hideQuest() {
+        document.getElementById('quest-text').innerText = "Dolt! Skicka vidare telefonen.";
+        document.getElementById('quest-text').style.filter = "blur(5px)";
+    }
+
+    // Går till nästa spelare i cirkeln
+    function nextPlayerQuest() {
+        currentQuestPlayerIndex++;
+        if (currentQuestPlayerIndex >= totalQuestPlayers) {
+            currentQuestPlayerIndex = 0; // Börja om på Spelare 1 om man vill kika igen
+        }
+        updateQuestPlayerUI();
+    }
+
+    // Återställer vyn om man går tillbaka till huvudmenyn
+    function resetQuestsView() {
+        document.getElementById('setup-quests').style.display = 'block';
+        document.getElementById('active-quests').style.display = 'none';
+        changeView('menu-view');
     }
 </script>
 
