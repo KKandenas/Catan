@@ -2,16 +2,16 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Catan: Piratbukten</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catan: Piratbukten (iPad Edition)</title>
     <style>
         :root {
-            --bg-color: #1a1510;
-            --card-bg: #2c2217;
+            --bg-color: #16120e;
+            --card-bg: #231a12;
             --accent-color: #d4af37;
             --text-color: #f5ebe0;
             --text-dim: #b5a494;
-            --border-color: #4a3b2c;
+            --border-color: #3d2f21;
         }
 
         * {
@@ -19,13 +19,14 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding-bottom: 70px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             user-select: none;
         }
 
@@ -33,81 +34,93 @@
             background-color: var(--card-bg);
             text-align: center;
             padding: 15px;
-            border-bottom: 2px solid var(--accent-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            border-bottom: 3px solid var(--accent-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
         }
 
         header h1 {
-            font-size: 1.4rem;
+            font-size: 1.8rem;
             color: var(--accent-color);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
         }
 
-        .container {
-            padding: 20px;
-            max-width: 600px;
+        /* iPad Grid Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr 1.2fr;
+            gap: 20px;
+            padding: 25px;
+            flex: 1;
+            max-width: 1400px;
             margin: 0 auto;
+            width: 100%;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flex-grow {
+            flex: 1;
         }
 
         h2 {
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             margin-bottom: 15px;
             color: var(--accent-color);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 5px;
-        }
-
-        /* Navigationsmeny i botten */
-        nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background-color: var(--card-bg);
-            border-top: 2px solid var(--border-color);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .nav-btn {
-            background: none;
-            border: none;
-            color: var(--text-dim);
-            font-size: 0.8rem;
-            font-weight: bold;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
             text-transform: uppercase;
-            cursor: pointer;
-            flex: 1;
-            height: 100%;
+            letter-spacing: 1px;
+        }
+
+        /* Tärningssektion */
+        .dice-container {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .die {
+            width: 60px;
+            height: 60px;
+            background-color: #fff;
+            color: #000;
+            border-radius: 10px;
+            display: flex;
             justify-content: center;
             align-items: center;
-            gap: 4px;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
 
-        .nav-btn.active {
+        .die.red {
+            background-color: #bf360c;
+            color: #fff;
+        }
+
+        #dice-total {
+            font-size: 3.5rem;
+            font-weight: bold;
             color: var(--accent-color);
-            background-color: rgba(214, 175, 55, 0.05);
-        }
-
-        .nav-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
+            text-align: center;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         /* Knappar */
@@ -115,14 +128,16 @@
             background-color: var(--accent-color);
             color: #000;
             border: none;
-            padding: 12px 20px;
-            font-size: 1rem;
+            padding: 15px 20px;
+            font-size: 1.1rem;
             font-weight: bold;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
             width: 100%;
-            transition: transform 0.1s;
+            transition: background 0.2s, transform 0.1s;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
 
         .btn:active {
@@ -132,8 +147,8 @@
         .btn-secondary {
             background-color: transparent;
             color: var(--accent-color);
-            border: 1px solid var(--accent-color);
-            margin-top: 10px;
+            border: 2px solid var(--accent-color);
+            margin-top: 12px;
         }
 
         /* Marknadstabell */
@@ -144,88 +159,100 @@
         }
 
         .market-table th, .market-table td {
-            padding: 12px;
+            padding: 14px 10px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
+            font-size: 1.1rem;
         }
 
         .market-table th {
             color: var(--text-dim);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
         }
 
         .trend-up { color: #4caf50; font-weight: bold; }
         .trend-down { color: #f44336; font-weight: bold; }
         .trend-stable { color: var(--text-dim); }
 
-        /* Gömd sektion för hemligheter */
+        /* Hemlighetsbox */
         .secret-box {
-            background-color: rgba(0,0,0,0.4);
-            border: 1px dashed var(--accent-color);
-            padding: 15px;
-            border-radius: 6px;
+            background-color: rgba(0,0,0,0.5);
+            border: 2px dashed var(--accent-color);
+            padding: 20px;
+            border-radius: 8px;
             text-align: center;
-            min-height: 100px;
+            margin-top: 20px;
+            min-height: 120px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-        }
-
-        .blur-text {
-            filter: blur(5px);
-            user-select: none;
-            pointer-events: none;
-        }
-
-        /* App-sidor */
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
+            font-size: 1.1rem;
+            line-height: 1.5;
         }
 
         #event-text {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             line-height: 1.6;
-            margin-bottom: 20px;
-            min-height: 80px;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+
+        #pirate-pos {
+            font-size: 1.5rem;
+            color: #ff9800;
+            font-weight: bold;
+            background: rgba(255, 152, 0, 0.1);
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid rgba(255, 152, 0, 0.2);
+        }
+
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>⚔️ Catan: Piratbukten ⚔️</h1>
+        <h1>⚔️ Catan: Piratbukten — Expeditionscentral ⚔️</h1>
     </header>
 
-    <div class="container">
-
-        <!-- FLIK 1: HÄNDELSER -->
-        <div id="page-events" class="page active">
+    <div class="dashboard">
+        
+        <!-- KOLUMN 1: TÄRNINGAR & HÄNDELSER -->
+        <div class="column">
             <div class="card">
-                <h2>Havets Nycker (Ny Runda)</h2>
-                <div id="event-text">Starta spelet genom att klicka på knappen nedan när ni har byggt startpositionerna.</div>
-                <button class="btn" onclick="nextRound()">Dra Ny Händelse</button>
+                <h2>Rundans Tärningsslag</h2>
+                <div class="dice-container">
+                    <div id="die1" class="die">?</div>
+                    <div id="die2" class="die red">?</div>
+                </div>
+                <div id="dice-total">Slå!</div>
+                <button class="btn" onclick="rollAndNextRound()">Slå & Starta Runda</button>
             </div>
-            <div class="card">
-                <h2>Spökpiratens Position</h2>
-                <p id="pirate-pos" style="font-size: 1.2rem; color: #ff9800; font-weight: bold;">⛵ Inte siktad ännu...</p>
+
+            <div class="card flex-grow">
+                <h2>Havets Nycker</h2>
+                <div id="event-text">Tryck på knappen ovan för att starta spelet och slå första slaget!</div>
             </div>
         </div>
 
-        <!-- FLIK 2: MARKNADEN -->
-        <div id="page-market" class="page">
-            <div class="card">
+        <!-- KOLUMN 2: DYNAMISK MARKNAD -->
+        <div class="column">
+            <div class="card flex-grow">
                 <h2>Hamnarnas Efterfrågan</h2>
-                <p style="font-size: 0.9rem; color: var(--text-dim); margin-bottom: 10px;">Byt i hamnarna enligt kurserna nedan under denna runda.</p>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 15px;">Handelskurser i hamnarna under denna runda:</p>
                 <table class="market-table">
                     <thead>
                         <tr>
                             <th>Resurs</th>
-                            <th>Kurs (Ge : Få)</th>
+                            <th>Kurs</th>
                             <th>Trend</th>
                         </tr>
                     </thead>
@@ -236,51 +263,35 @@
             </div>
         </div>
 
-        <!-- FLIK 3: LOGGBOKEN (HEMLISAR) -->
-        <div id="page-log" class="page">
-            <div class="card">
-                <h2>Kaptenens Hemliga Loggbok</h2>
-                <p style="font-size: 0.9rem; color: var(--text-dim); margin-bottom: 15px;">Skicka runt telefonen till den som ska göra en handling.</p>
+        <!-- KOLUMN 3: KAPTENENS LOGGBOK (HEMLISAR) -->
+        <div class="column">
+            <div class="card flex-grow">
+                <h2>Kaptenens Loggbok</h2>
+                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 20px;">Låt spelaren göra sin handling i hemlighet och dölja efteråt.</p>
                 
                 <button class="btn" onclick="drawTreasureMap()">Köp Skattkarta (1 lamm + 1 vete)</button>
                 <button class="btn btn-secondary" onclick="startPirateBattle()">Slåss mot Spökpiraten</button>
                 
-                <div id="secret-container" style="display:none; margin-top: 20px;">
+                <div id="secret-container" style="display:none;">
                     <div class="secret-box" id="secret-content">
-                        <!-- Hemligt innehåll hamnar här -->
+                        <!-- Hemligt innehåll -->
                     </div>
-                    <button class="btn btn-secondary" style="margin-top:10px; background:#4a3b2c; color:white;" onclick="hideSecret()">Dölj Hemlighet</button>
+                    <button class="btn btn-secondary" style="margin-top:15px; background:#3d2f21; color:white; border-color:#5c4732;" onclick="hideSecret()">Dölj för nästa spelare</button>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <!-- BOTTMENY -->
-    <nav>
-        <button class="nav-btn active" onclick="switchPage('page-events', this)">
-            <svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 3.99L19.53 19H4.47L12 5.99zM13 16h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg>
-            Händelser
-        </button>
-        <button class="nav-btn" onclick="switchPage('page-market', this)">
-            <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
-            Marknad
-        </button>
-        <button class="nav-btn" onclick="switchPage('page-log', this)">
-            <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 16H6V4h2v8l2.5-1.5L13 12V4h5v14z"/></svg>
-            Loggbok
-        </button>
-    </nav>
-
     <script>
         // --- SPELDATA ---
         const events = [
             "⚠️ SMUGGLARVINDAR: Alla båtar får flyttas 1 extra steg gratis denna runda.",
-            "🏴‍☠️ PIRATRAZZIA: Spökpiraten plundrar alla som har bosättningar intill guldgruvor. Förlora 1 valfri resurs.",
+            "🏴‍☠️ PIRATRAZZIA: Spökpiraten plundrar alla som har bosättningar intill guldgruvor eller guldöar. Förlora 1 valfri resurs.",
             "🌾 SVÅR TORKA: Vete-produktion ger ingenting denna runda. Marknaden skriker efter vete!",
             "🐟 SILLAPERIOD: Alla havsbrickor som gränsar till en 6:a eller 8:a ger 1 valfritt kort till spelare med båtar där.",
             "🌊 STORM PÅ HAVET: Alla båtar som står helt fritt ute på havet (inte rör en ö) måste slå en tärning. Vid 1-2 flyttas båten tillbaka till närmsta hamn.",
-            "💎 KUNGLIG KONVOJ: En rik handelsflotta passerar. Den spelare med flest båtar får direkt 2 valfria resurskort.",
+            "💎 KUNGLIG KONVOJ: En rik handelsflotta passerar. Den spelare med flest båtar på spelplanen får direkt 2 valfria resurskort.",
             "🌋 UNDERVATTENSVULKAN: En ny ö håller på att bildas! Placera ett sifferchip på en valfri tom havsbricka. Den ger nu malm vid det numret."
         ];
 
@@ -293,30 +304,37 @@
 
         const resources = ["Trä", "Lamm", "Vete", "Malm", "Lera"];
 
-        // --- NAVIGATION ---
-        function switchPage(pageId, btn) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            btn.classList.add('active');
-        }
+        // --- LOGIK: TÄRNINGAR & NY RUNDA ---
+        function rollAndNextRound() {
+            // Slumpa tärningar
+            const d1 = Math.floor(Math.random() * 6) + 1;
+            const d2 = Math.floor(Math.random() * 6) + 1;
+            const total = d1 + d2;
 
-        // --- LOGIK: NY RUNDA ---
-        function nextRound() {
-            // Slumpa händelse
-            const randomEvent = events[Math.floor(Math.random() * events.length)];
-            document.getElementById('event-text').innerText = randomEvent;
+            // Uppdatera tärnings-UI
+            document.getElementById('die1').innerText = d1;
+            document.getElementById('die2').innerText = d2;
+            document.getElementById('dice-total').innerText = total;
 
-            // Slumpa piratposition (havsbricka eller siffra)
-            const pirateHex = Math.floor(Math.random() * 11) + 2; // 2-12
-            if(pirateHex === 7) {
-                document.getElementById('pirate-pos').innerText = "⛵ Piraten lurar i skuggorna (Välj valfri siffra!)";
+            // Bestäm bas-händelse eller 7:a
+            let roundEvent = "";
+            if (total === 7) {
+                roundEvent = "🏴‍☠️ RÖVARE & PIRATER! En 7:a har slagits. Alla med mer än 7 kort måste kasta hälften. Flytta valfri pirat/rövare på spelplanen och stjäl ett kort!";
             } else {
-                document.getElementById('pirate-pos').innerText = `⛵ Siktad vid rutor med siffra: ${pirateHex}!`;
+                roundEvent = events[Math.floor(Math.random() * events.length)];
+                
+                // Slumpa även in ett litet tips om var spökpiraten härjar om det inte blev en 7:a
+                const pirateHex = Math.floor(Math.random() * 11) + 2;
+                if (pirateHex !== 7) {
+                    roundEvent += `<br><br><span style='color: #ff9800; font-weight: bold;'>⛵ Spökpiraten har siktats i närheten av rutor med siffra: ${pirateHex}! Det är farligt att stå där nu.</span>`;
+                }
             }
 
-            // Uppdatera marknaden
+            document.getElementById('event-text').innerHTML = roundEvent;
+
+            // Uppdatera resten av panelen
             generateMarket();
+            hideSecret();
         }
 
         // --- LOGIK: MARKNAD ---
@@ -325,7 +343,6 @@
             tbody.innerHTML = "";
 
             resources.forEach(res => {
-                // Slumpa kurs (t.ex. 2:1, 3:1 eller 4:1)
                 const rate = Math.floor(Math.random() * 3) + 2;
                 let trend = "➡️ Stabil";
                 let trendClass = "trend-stable";
@@ -342,13 +359,13 @@
             });
         }
 
-        // --- LOGIK: HEMLIGHETER (LOGGBOKEN) ---
+        // --- LOGIK: LOGGBOKEN ---
         function drawTreasureMap() {
             const container = document.getElementById('secret-container');
             const content = document.getElementById('secret-content');
             const map = treasureMaps[Math.floor(Math.random() * treasureMaps.length)];
             
-            content.innerHTML = `<p style='color:var(--accent-color); font-weight:bold; margin-bottom:10px;'>DITT HEMLIGA UPPDRAG:</p><p>${map}</p>`;
+            content.innerHTML = `<p style='color:var(--accent-color); font-weight:bold; margin-bottom:8px;'>DITT HEMLIGA UPPDRAG:</p><p>${map}</p>`;
             container.style.display = "block";
         }
 
@@ -356,18 +373,17 @@
             const container = document.getElementById('secret-container');
             const content = document.getElementById('secret-content');
             
-            // Slumpa utfall på striden
             const playerRoll = Math.floor(Math.random() * 6) + 1;
             const pirateRoll = Math.floor(Math.random() * 6) + 1;
             
             let resultText = "";
             if (playerRoll >= pirateRoll) {
-                resultText = `<span style='color:#4caf50; font-weight:bold;'>SEGER!</span><br>Du sänkte piratbåten! Ta 2 valfria resurskort från banken. (Ditt tärningsslag: ${playerRoll} vs Pirat: ${pirateRoll})`;
+                resultText = `<span style='color:#4caf50; font-weight:bold;'>SEGER!</span><br>Du sänkte piratbåten! Ta 2 valfria resurskort från banken.<br>(Ditt slag: ${playerRoll} vs Pirat: ${pirateRoll})`;
             } else {
-                resultText = `<span style='color:#f44336; font-weight:bold;'>FÖRLUST!</span><br>Piraterna sköt sönder dina segel. Du måste ta bort en av dina båtar från spelplanen eller ge piraten (banken) 2 valfria kort. (Ditt slag: ${playerRoll} vs Pirat: ${pirateRoll})`;
+                resultText = `<span style='color:#f44336; font-weight:bold;'>FÖRLUST!</span><br>Piraterna sköt sönder dina segel. Ta bort en av dina båtar från planen eller ge piraten 2 valfria kort.<br>(Ditt slag: ${playerRoll} vs Pirat: ${pirateRoll})`;
             }
 
-            content.innerHTML = `<p style='color:var(--accent-color); font-weight:bold; margin-bottom:10px;'>STRIDENS UTGÅNG:</p><p>${resultText}</p>`;
+            content.innerHTML = `<p style='color:var(--accent-color); font-weight:bold; margin-bottom:8px;'>STRIDENS UTGÅNG:</p><p>${resultText}</p>`;
             container.style.display = "block";
         }
 
@@ -376,7 +392,7 @@
             document.getElementById('secret-content').innerHTML = "";
         }
 
-        // Starta med en genererad marknad direkt
+        // Initiera första marknaden
         generateMarket();
     </script>
 </body>
