@@ -176,9 +176,21 @@
             background-color: transparent;
             color: var(--accent-color);
             border: 2px solid var(--accent-color);
-            margin-top: 8px;
             padding: 10px 15px;
             font-size: 0.95rem;
+        }
+
+        /* Horisontell rad för loggboksknappar */
+        .logbook-btn-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .logbook-btn-row .btn {
+            padding: 10px 8px;
+            font-size: 0.85rem; /* Något mindre text för att passa i bredd */
         }
 
         /* Marknadstabell */
@@ -209,30 +221,37 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            overflow: hidden;
         }
 
         .secret-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            margin-top: 10px;
             overflow: hidden;
         }
 
         .secret-box {
             background-color: rgba(0,0,0,0.5);
             border: 2px dashed var(--accent-color);
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
             text-align: center;
             flex: 1;
             display: flex;
             flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+        }
+
+        .secret-text-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 1rem;
+            font-size: 0.95rem;
             line-height: 1.4;
-            overflow-y: auto; /* Gör texten skrollbar om den blir för lång */
         }
 
         #event-text {
@@ -357,14 +376,20 @@
                 <div class="logbook-content">
                     <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 10px;">Gör din handling i hemlighet och dölj efteråt.</p>
                     
-                    <button class="btn" onclick="drawTreasureMap()">Köp Skattkarta (1 lamm + 1 vete)</button>
-                    <button class="btn btn-secondary" onclick="startPirateBattle()">Slåss mot Spökpiraten</button>
+                    <div class="logbook-btn-row">
+                        <button class="btn" onclick="drawTreasureMap()">Köp Karta<br><span style="font-size:0.75rem; font-weight:normal; text-transform:none; color:#000;">(1 lamm + 1 vete)</span></button>
+                        <button class="btn btn-secondary" style="margin-top:0;" onclick="startPirateBattle()">Slåss mot<br>Spökpiraten</button>
+                    </div>
                     
                     <div class="secret-container" id="secret-container" style="display:none;">
-                        <div class="secret-box" id="secret-content">
-                            <!-- Hemligt innehåll -->
+                        <div class="secret-box">
+                            <!-- Dölj-knappen ligger nu säkert i toppen av rutan -->
+                            <button class="btn" style="background:#3d2f21; color:white; border:1px solid #5c4732; padding: 8px; font-size:0.85rem;" onclick="hideSecret()">❌ Dölj för nästa spelare</button>
+                            
+                            <div class="secret-text-area" id="secret-content">
+                                <!-- Hemligt innehåll -->
+                            </div>
                         </div>
-                        <button class="btn btn-secondary" style="margin-top:8px; background:#3d2f21; color:white; border-color:#5c4732; width: 100%; flex-shrink: 0;" onclick="hideSecret()">Dölj för nästa spelare</button>
                     </div>
                 </div>
             </div>
@@ -397,7 +422,7 @@
             <ul>
                 <li><strong>1. Slå i appen:</strong> Spelaren vars tur det är trycker på "Slå tärningar". Appen visar resursnumret, slumpar en global händelse samt uppdaterar hamnarnas växelkurser.</li>
                 <li><strong>2. Resurser:</strong> Alla spelare samlar råvaror från tärningsslaget som vanligt baserat på sina hus/båtar (tänk på piratblockeringen ovan!).</li>
-                <li><strong>3. Handla (Marknaden):</strong> Under din tur kan du handla med banken i hamnar till de kurser som appen visar just nu (t.ex. 2:1 för Trä om det är hög efterfrågan).</li>
+                <li><strong>3. Handla (Marknaden):</strong> Under din tur kan du handle med banken i hamnar till de kurser som appen visar just nu (t.ex. 2:1 för Trä om det är hög efterfrågan).</li>
                 <li><strong>4. Loggboken:</strong> Du kan betala 1 lamm + 1 vete till banken för att dra en hemlig skattkarta i appen. Dölj alltid skärmen efteråt!</li>
             </ul>
             
