@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catan Companion Portal</title>
+    <style>
+        :root {
+            --space-bg: #060913;
+            --panel-blue: #111a2e;
+            --border-color: #1f355e;
+            --text-color: #33e1ff;
+            --gold-color: #ffcc00;
+            --pirate-red: #ff3344;
+            --noir-gray: #a0aab5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--space-bg);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .portal-container {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 300;
+            color: var(--text-color);
+            text-shadow: 0 0 20px rgba(0, 225, 255, 0.4);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #8bbcd8;
+            font-size: 1.1rem;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .game-card {
+            background-color: rgba(17, 26, 46, 0.7);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        /* Hover-effekter baserat på speltema */
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 225, 255, 0.15);
+        }
+
+        .card-meteor:hover { border-color: var(--text-color); }
+        .card-meteor::before { background: var(--text-color); }
+
+        .card-pirate:hover { border-color: var(--pirate-red); }
+        .card-pirate::before { background: var(--pirate-red); }
+
+        .card-noir:hover { border-color: var(--noir-gray); }
+        .card-noir::before { background: var(--noir-gray); }
+
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .game-title {
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .card-meteor .game-title { color: var(--text-color); }
+        .card-pirate .game-title { color: var(--pirate-red); }
+        .card-noir .game-title { color: var(--noir-gray); }
+
+        .game-desc {
+            font-size: 0.95rem;
+            color: #ceddf0;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .btn-launch {
+            background-color: transparent;
+            border: 1px solid currentColor;
+            padding: 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: background-color 0.2s;
+        }
+
+        .card-meteor .btn-launch { color: var(--text-color); }
+        .card-meteor:hover .btn-launch { background-color: rgba(51, 225, 255, 0.1); }
+
+        .card-pirate .btn-launch { color: var(--pirate-red); }
+        .card-pirate:hover .btn-launch { background-color: rgba(255, 51, 68, 0.1); }
+
+        .card-noir .btn-launch { color: var(--noir-gray); }
+        .card-noir:hover .btn-launch { background-color: rgba(160, 170, 181, 0.1); }
+
+        footer {
+            margin-top: 40px;
+            font-size: 0.8rem;
+            color: #53698c;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="portal-container">
+        <header>
+            <h1>🌌 CATAN COMPANION</h1>
+            <p>Välj ett scenario för att starta kontrollpanelen och digitalisera spelkvällen</p>
+        </header>
+
+        <div class="game-grid">
+            
+            <!-- Meteor Impact -->
+            <a href="meteor.html" class="game-card card-meteor">
+                <div>
+                    <div class="game-icon">☄️</div>
+                    <div class="game-title">Meteor Impact</div>
+                    <div class="game-desc">Samarbeta för att hålla meteoren borta från radarn med planetlasrar och sköldkupoler innan de bärande sektorerna utplånas permanent.</div>
+                </div>
+                <button class="btn-launch">Starta Gränssnitt</button>
+            </a>
+
+            <!-- Piratbukten -->
+            <a href="piratbukten.html" class="game-card card-pirate">
+                <div>
+                    <div class="game-icon">🏴‍☠️</div>
+                    <div class="game-title">Piratbukten</div>
+                    <div class="game-desc">Navigera på det digitala pirathavet. Räkna med plundringar, stormar på tärningsslag 7, och dynamiska tullavgifter längs handelsrutterna.</div>
+                </div>
+                <button class="btn-launch">Starta Gränssnitt</button>
+            </a>
+
+            <!-- Catan Noir -->
+            <a href="catannoir.html" class="game-card card-noir">
+                <div>
+                    <div class="game-icon">🕵️‍♂️</div>
+                    <div class="game-title">Catan Noir</div>
+                    <div class="game-desc">Lös mysterier i Catans dunkla gränder. Hantera mutor, lönnmord vid tärningsslag 7, och lita inte på någon i jakten på imperiet.</div>
+                </div>
+                <button class="btn-launch">Starta Gränssnitt</button>
+            </a>
+
+        </div>
+
+        <footer>
+            &copy; 2026 Catan Defense Network &bull; System Ready
+        </footer>
+    </div>
+
+</body>
+</html>
