@@ -24,87 +24,115 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             user-select: none;
+            overflow: hidden;
         }
 
         header {
             background-color: var(--card-bg);
-            text-align: center;
-            padding: 15px;
+            padding: 10px 25px;
             border-bottom: 3px solid var(--accent-color);
             box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         header h1 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: var(--accent-color);
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             text-transform: uppercase;
+        }
+
+        .rules-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: 1px solid var(--accent-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .rules-link:hover {
+            background: rgba(214, 175, 55, 0.1);
         }
 
         /* iPad Grid Layout */
         .dashboard {
             display: grid;
-            grid-template-columns: 1.3fr 1fr 1.2fr;
-            gap: 20px;
-            padding: 25px;
+            grid-template-columns: 1.2fr 1fr 1.2fr;
+            gap: 15px;
+            padding: 15px;
             flex: 1;
-            max-width: 1400px;
-            margin: 0 auto;
             width: 100%;
+            height: calc(100vh - 60px);
         }
 
         .column {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
+            height: 100%;
         }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
             display: flex;
             flex-direction: column;
         }
 
         .flex-grow {
             flex: 1;
+            overflow: hidden;
         }
 
         h2 {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
             color: var(--accent-color);
             border-bottom: 2px solid var(--border-color);
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        /* Tärningssektion */
+        /* Tärningssektion i mitten */
+        .dice-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
         .dice-container {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 8px;
         }
 
         .die {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background-color: #fff;
             color: #000;
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: bold;
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
@@ -115,11 +143,12 @@
         }
 
         #dice-total {
-            font-size: 3.5rem;
+            font-size: 2.8rem;
             font-weight: bold;
             color: var(--accent-color);
             text-align: center;
-            margin-bottom: 15px;
+            line-height: 1;
+            margin-bottom: 10px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
@@ -128,13 +157,12 @@
             background-color: var(--accent-color);
             color: #000;
             border: none;
-            padding: 15px 20px;
-            font-size: 1.1rem;
+            padding: 12px 15px;
+            font-size: 1rem;
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
             width: 100%;
-            transition: background 0.2s, transform 0.1s;
             text-transform: uppercase;
             letter-spacing: 1px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
@@ -148,26 +176,27 @@
             background-color: transparent;
             color: var(--accent-color);
             border: 2px solid var(--accent-color);
-            margin-top: 12px;
+            margin-top: 8px;
+            padding: 10px 15px;
+            font-size: 0.95rem;
         }
 
         /* Marknadstabell */
         .market-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
         }
 
         .market-table th, .market-table td {
-            padding: 14px 10px;
+            padding: 8px 6px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .market-table th {
             color: var(--text-dim);
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
         }
 
@@ -179,75 +208,114 @@
         .secret-box {
             background-color: rgba(0,0,0,0.5);
             border: 2px dashed var(--accent-color);
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
             text-align: center;
-            margin-top: 20px;
-            min-height: 120px;
+            margin-top: 10px;
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 1.1rem;
-            line-height: 1.5;
+            font-size: 1rem;
+            line-height: 1.4;
         }
 
         #event-text {
-            font-size: 1.25rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
+            font-size: 1.1rem;
+            line-height: 1.5;
             color: #fff;
+            overflow-y: auto;
         }
 
-        #pirate-pos {
+        /* MODAL (Popup för regler) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 25px;
+            width: 80%;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+        }
+
+        .modal h3 {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .modal ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .modal li {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .close-modal {
+            float: right;
             font-size: 1.5rem;
-            color: #ff9800;
             font-weight: bold;
-            background: rgba(255, 152, 0, 0.1);
-            padding: 15px;
-            border-radius: 6px;
-            text-align: center;
-            border: 1px solid rgba(255, 152, 0, 0.2);
+            color: var(--text-dim);
+            cursor: pointer;
         }
 
-        @media (max-width: 900px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
+        .close-modal:hover {
+            color: #fff;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>⚔️ Catan: Piratbukten — Expeditionscentral ⚔️</h1>
+        <h1>⚔️ Catan: Piratbukten ⚔️</h1>
+        <div class="rules-link" onclick="toggleModal(true)">ℹ️ Spelregler & Uppsättning</div>
     </header>
 
     <div class="dashboard">
         
-        <!-- KOLUMN 1: TÄRNINGAR & HÄNDELSER -->
+        <!-- KOLUMN 1: HAVETS NYCKER -->
         <div class="column">
-            <div class="card">
-                <h2>Rundans Tärningsslag</h2>
+            <div class="card flex-grow">
+                <h2>Havets Nycker (Händelse)</h2>
+                <div id="event-text">Tryck på <strong>Slå tärningar</strong> i mitten för att starta spelet och generera första rundan!</div>
+            </div>
+        </div>
+
+        <!-- KOLUMN 2: TÄRNINGAR & MARKNAD -->
+        <div class="column">
+            <div class="card dice-box">
                 <div class="dice-container">
                     <div id="die1" class="die">?</div>
                     <div id="die2" class="die red">?</div>
                 </div>
                 <div id="dice-total">Slå!</div>
-                <button class="btn" onclick="rollAndNextRound()">Slå & Starta Runda</button>
+                <button class="btn" onclick="rollAndNextRound()">Slå Tärningar</button>
             </div>
 
-            <div class="card flex-grow">
-                <h2>Havets Nycker</h2>
-                <div id="event-text">Tryck på knappen ovan för att starta spelet och slå första slaget!</div>
-            </div>
-        </div>
-
-        <!-- KOLUMN 2: DYNAMISK MARKNAD -->
-        <div class="column">
             <div class="card flex-grow">
                 <h2>Hamnarnas Efterfrågan</h2>
-                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 15px;">Handelskurser i hamnarna under denna runda:</p>
                 <table class="market-table">
                     <thead>
                         <tr>
@@ -267,20 +335,46 @@
         <div class="column">
             <div class="card flex-grow">
                 <h2>Kaptenens Loggbok</h2>
-                <p style="font-size: 0.95rem; color: var(--text-dim); margin-bottom: 20px;">Låt spelaren göra sin handling i hemlighet och dölja efteråt.</p>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 10px;">Gör din handling i hemlighet och dölj efteråt.</p>
                 
                 <button class="btn" onclick="drawTreasureMap()">Köp Skattkarta (1 lamm + 1 vete)</button>
                 <button class="btn btn-secondary" onclick="startPirateBattle()">Slåss mot Spökpiraten</button>
                 
-                <div id="secret-container" style="display:none;">
+                <div id="secret-container" style="display:none; flex: 1; display: flex; flex-direction: column;">
                     <div class="secret-box" id="secret-content">
                         <!-- Hemligt innehåll -->
                     </div>
-                    <button class="btn btn-secondary" style="margin-top:15px; background:#3d2f21; color:white; border-color:#5c4732;" onclick="hideSecret()">Dölj för nästa spelare</button>
+                    <button class="btn btn-secondary" style="margin-top:8px; background:#3d2f21; color:white; border-color:#5c4732;" onclick="hideSecret()">Dölj för nästa spelare</button>
                 </div>
             </div>
         </div>
 
+    </div>
+
+    <!-- REGLER MODAL (POPUP) -->
+    <div id="rules-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleModal(false)">&times;</span>
+            <h3>⚓ Uppsättning & Spelregler</h3>
+            
+            <p style="margin-bottom: 15px; font-weight: bold; color: var(--accent-color);">Spelplan (6 spelare + Sjöfarare):</p>
+            <ul>
+                <li><strong>Huvudön:</strong> Bygg en stor, känd ö i mitten/ena sidan med de vanliga landbrickorna. Alla placerar sina 2 starthus och vägar här helt öppet.</li>
+                <li><strong>Yttre Havet:</strong> Omringa huvudön med havsbrickor.</li>
+                <li><strong>Dolda Öar:</strong> Placera ut småöar längst ut i havet med <strong>landbrickor och sifferchips lagda uppochned</strong>. Guldgruvor läggs längst bort.</li>
+                <li><strong>Utforskning:</strong> När en spelare bygger en båt som når fram till en dold bricka, vänds brickan och siffran upp. Ön är upptäckt!</li>
+            </ul>
+
+            <p style="margin-bottom: 15px; font-weight: bold; color: var(--accent-color);">Så här spelar ni rundan:</p>
+            <ul>
+                <li><strong>1. Slå i appen:</strong> Spelaren vars tur det är trycker på "Slå tärningar". Appen visar resurs-siffran, slumpar en global händelse samt uppdaterar hamnarnas växelkurser.</li>
+                <li><strong>2. Resurser:</strong> Alla spelare samlar råvaror från tärningsslaget som vanligt baserat på sina hus/båtar.</li>
+                <li><strong>3. Handla (Marknaden):</strong> Under din tur kan du handla med banken i hamnar till de kurser som appen visar just nu (t.ex. 2:1 för Trä om det är hög efterfrågan).</li>
+                <li><strong>4. Loggboken:</strong> Du kan betala 1 lamm + 1 vete till banken för att dra en hemlig skattkarta, eller utmana spökpiraten om du står på en drabbad ruta. Dölj alltid skärmen efteråt!</li>
+            </ul>
+            
+            <button class="btn" style="margin-top: 15px;" onclick="toggleModal(false)">Skepp ohoj! (Stäng)</button>
+        </div>
     </div>
 
     <script>
@@ -306,33 +400,28 @@
 
         // --- LOGIK: TÄRNINGAR & NY RUNDA ---
         function rollAndNextRound() {
-            // Slumpa tärningar
             const d1 = Math.floor(Math.random() * 6) + 1;
             const d2 = Math.floor(Math.random() * 6) + 1;
             const total = d1 + d2;
 
-            // Uppdatera tärnings-UI
             document.getElementById('die1').innerText = d1;
             document.getElementById('die2').innerText = d2;
             document.getElementById('dice-total').innerText = total;
 
-            // Bestäm bas-händelse eller 7:a
             let roundEvent = "";
             if (total === 7) {
-                roundEvent = "🏴‍☠️ RÖVARE & PIRATER! En 7:a har slagits. Alla med mer än 7 kort måste kasta hälften. Flytta valfri pirat/rövare på spelplanen och stjäl ett kort!";
+                roundEvent = "🏴‍☠️ RÖVARE & PIRATER! En 7:a! Alla med mer än 7 kort kastar hälften. Flytta valfri pirat/rövare på spelplanen och stjäl ett kort!";
             } else {
                 roundEvent = events[Math.floor(Math.random() * events.length)];
                 
-                // Slumpa även in ett litet tips om var spökpiraten härjar om det inte blev en 7:a
                 const pirateHex = Math.floor(Math.random() * 11) + 2;
                 if (pirateHex !== 7) {
-                    roundEvent += `<br><br><span style='color: #ff9800; font-weight: bold;'>⛵ Spökpiraten har siktats i närheten av rutor med siffra: ${pirateHex}! Det är farligt att stå där nu.</span>`;
+                    roundEvent += `<br><br><span style='color: #ff9800; font-weight: bold;'>游 Spökpiraten har siktats nära rutor med siffra: ${pirateHex}! Gäller ej på huvudön.</span>`;
                 }
             }
 
             document.getElementById('event-text').innerHTML = roundEvent;
 
-            // Uppdatera resten av panelen
             generateMarket();
             hideSecret();
         }
@@ -347,8 +436,8 @@
                 let trend = "➡️ Stabil";
                 let trendClass = "trend-stable";
 
-                if (rate === 2) { trend = "▲ Hög efterfrågan"; trendClass = "trend-up"; }
-                if (rate === 4) { trend = "▼ Överflöd"; trendClass = "trend-down"; }
+                if (rate === 2) { trend = "▲ Hög"; trendClass = "trend-up"; }
+                if (rate === 4) { trend = "▼ Låg"; trendClass = "trend-down"; }
 
                 const row = `<tr>
                     <td><strong>${res}</strong></td>
@@ -365,8 +454,8 @@
             const content = document.getElementById('secret-content');
             const map = treasureMaps[Math.floor(Math.random() * treasureMaps.length)];
             
-            content.innerHTML = `<p style='color:var(--accent-color); font-weight:bold; margin-bottom:8px;'>DITT HEMLIGA UPPDRAG:</p><p>${map}</p>`;
-            container.style.display = "block";
+            content.innerHTML = `<p style='color:var(--accent-color); font-weight:bold; margin-bottom:5px;'>DITT HEMLIGA UPPDRAG:</p><p>${map}</p>`;
+            container.style.display = "flex";
         }
 
         function startPirateBattle() {
@@ -378,18 +467,23 @@
             
             let resultText = "";
             if (playerRoll >= pirateRoll) {
-                resultText = `<span style='color:#4caf50; font-weight:bold;'>SEGER!</span><br>Du sänkte piratbåten! Ta 2 valfria resurskort från banken.<br>(Ditt slag: ${playerRoll} vs Pirat: ${pirateRoll})`;
+                resultText = `<span style='color:#4caf50; font-weight:bold;'>SEGER!</span> Sänkte piraten! Ta 2 valfria resurskort.<br>(Du: ${playerRoll} vs Pirat: ${pirateRoll})`;
             } else {
-                resultText = `<span style='color:#f44336; font-weight:bold;'>FÖRLUST!</span><br>Piraterna sköt sönder dina segel. Ta bort en av dina båtar från planen eller ge piraten 2 valfria kort.<br>(Ditt slag: ${playerRoll} vs Pirat: ${pirateRoll})`;
+                resultText = `<span style='color:#f44336; font-weight:bold;'>FÖRLUST!</span> Förlora 1 båt eller ge banken 2 valfria kort.<br>(Du: ${playerRoll} vs Pirat: ${pirateRoll})`;
             }
 
-            content.innerHTML = `<p style='color:var(--accent-color); font-weight:bold; margin-bottom:8px;'>STRIDENS UTGÅNG:</p><p>${resultText}</p>`;
-            container.style.display = "block";
+            content.innerHTML = `<p style='color:var(--accent-color); font-weight:bold; margin-bottom:5px;'>STRIDENS UTGÅNG:</p><p>${resultText}</p>`;
+            container.style.display = "flex";
         }
 
         function hideSecret() {
             document.getElementById('secret-container').style.display = "none";
             document.getElementById('secret-content').innerHTML = "";
+        }
+
+        // --- MODAL CONTROL ---
+        function toggleModal(show) {
+            document.getElementById('rules-modal').style.display = show ? "flex" : "none";
         }
 
         // Initiera första marknaden
