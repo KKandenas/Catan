@@ -204,14 +204,27 @@
         .trend-down { color: #f44336; font-weight: bold; }
         .trend-stable { color: var(--text-dim); }
 
-        /* Hemlighetsbox */
+        /* Sektion för Loggbok och dess hemligheter */
+        .logbook-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .secret-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
         .secret-box {
             background-color: rgba(0,0,0,0.5);
             border: 2px dashed var(--accent-color);
             padding: 15px;
             border-radius: 8px;
             text-align: center;
-            margin-top: 10px;
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -219,6 +232,7 @@
             align-items: center;
             font-size: 1rem;
             line-height: 1.4;
+            overflow-y: auto; /* Gör texten skrollbar om den blir för lång */
         }
 
         #event-text {
@@ -340,16 +354,18 @@
         <div class="column">
             <div class="card flex-grow">
                 <h2>Kaptenens Loggbok</h2>
-                <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 10px;">Gör din handling i hemlighet och dölj efteråt.</p>
-                
-                <button class="btn" onclick="drawTreasureMap()">Köp Skattkarta (1 lamm + 1 vete)</button>
-                <button class="btn btn-secondary" onclick="startPirateBattle()">Slåss mot Spökpiraten</button>
-                
-                <div id="secret-container" style="display:none; flex: 1; display: flex; flex-direction: column;">
-                    <div class="secret-box" id="secret-content">
-                        <!-- Hemligt innehåll -->
+                <div class="logbook-content">
+                    <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 10px;">Gör din handling i hemlighet och dölj efteråt.</p>
+                    
+                    <button class="btn" onclick="drawTreasureMap()">Köp Skattkarta (1 lamm + 1 vete)</button>
+                    <button class="btn btn-secondary" onclick="startPirateBattle()">Slåss mot Spökpiraten</button>
+                    
+                    <div class="secret-container" id="secret-container" style="display:none;">
+                        <div class="secret-box" id="secret-content">
+                            <!-- Hemligt innehåll -->
+                        </div>
+                        <button class="btn btn-secondary" style="margin-top:8px; background:#3d2f21; color:white; border-color:#5c4732; width: 100%; flex-shrink: 0;" onclick="hideSecret()">Dölj för nästa spelare</button>
                     </div>
-                    <button class="btn btn-secondary" style="margin-top:8px; background:#3d2f21; color:white; border-color:#5c4732;" onclick="hideSecret()">Dölj för nästa spelare</button>
                 </div>
             </div>
         </div>
