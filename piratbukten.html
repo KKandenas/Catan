@@ -249,17 +249,22 @@
             padding: 25px;
             width: 80%;
             max-width: 700px;
-            max-height: 80vh;
+            max-height: 85vh;
             overflow-y: auto;
             box-shadow: 0 10px 25px rgba(0,0,0,0.7);
         }
 
         .modal h3 {
             color: var(--accent-color);
-            margin-bottom: 15px;
+            margin-top: 15px;
+            margin-bottom: 10px;
             text-transform: uppercase;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 5px;
+        }
+        
+        .modal h3:first-of-type {
+            margin-top: 0;
         }
 
         .modal ul {
@@ -355,22 +360,29 @@
     <div id="rules-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="toggleModal(false)">&times;</span>
-            <h3>⚓ Uppsättning & Spelregler</h3>
-            
-            <p style="margin-bottom: 15px; font-weight: bold; color: var(--accent-color);">Spelplan (6 spelare + Sjöfarare):</p>
+            <h3>⚓ Uppsättning & Spelplan</h3>
             <ul>
-                <li><strong>Huvudön:</strong> Bygg en stor, känd ö i mitten/ena sidan med de vanliga landbrickorna. Alla placerar sina 2 starthus och vägar här helt öppet.</li>
-                <li><strong>Yttre Havet:</strong> Omringa huvudön med havsbrickor.</li>
-                <li><strong>Dolda Öar:</strong> Placera ut småöar längst ut i havet med <strong>landbrickor och sifferchips lagda uppochned</strong>. Guldgruvor läggs längst bort.</li>
-                <li><strong>Utforskning:</strong> När en spelare bygger en båt som når fram till en dold bricka, vänds brickan och siffran upp. Ön är upptäckt!</li>
+                <li><strong>Huvudön:</strong> Bygg en stor, känd ö i mitten eller längs ena sidan med vanliga landbrickor. Alla startar med sina 2 hus och vägar här helt öppet.</li>
+                <li><strong>Yttre Havet:</strong> Omringa huvudön helt med havsbrickor.</li>
+                <li><strong>Dolda Öar:</strong> Placera ut småöar längst ut i havet med <strong>landbrickor och sifferchips lagda uppochned</strong>. Guldgruvor läggs allra längst bort.</li>
+                <li><strong>Utforskning:</strong> När en båt byggs så att den gränsar till en dold bricka vänder ni upp brickan och dess sifferchip. Ön är nu upptäckt!</li>
             </ul>
 
-            <p style="margin-bottom: 15px; font-weight: bold; color: var(--accent-color);">Så här spelar ni rundan:</p>
+            <h3>👻 Så fungerar Spökpiraten</h3>
             <ul>
-                <li><strong>1. Slå i appen:</strong> Spelaren vars tur det är trycker på "Slå tärningar". Appen visar resurs-siffran, slumpar en global händelse samt uppdaterar hamnarnas växelkurser.</li>
-                <li><strong>2. Resurser:</strong> Alla spelare samlar råvaror från tärningsslaget som vanligt baserat på sina hus/båtar.</li>
+                <li><strong>Position:</strong> Längst ner i händelserutan ser ni varje runda var piraten befinner sig (t.ex. *"Siktad nära rutor med siffra: 5"*).</li>
+                <li><strong>Blockering:</strong> Piraten blockerar just nu produktionen kring **alla dolda/upptäckta småöar ute till havs** som har den siffran. Om numret slås får bosättningar intill dessa öar *inga* resurser den rundan.</li>
+                <li><strong>Huvudön är säker:</strong> Piraten vågar sig aldrig in till huvudön. Siffran blockerar bara ute på havet.</li>
+                <li><strong>Strid:</strong> Har du en båt eller hus intill en ö med den drabbade siffran kan du välja att slåss mot honom via knappen i **Kaptenens Loggbok** för att vinna resurser.</li>
+                <li><strong>Om tärningen visar 7:</strong> Då slår piraten till på riktigt! Flytta den fysiska pirat/rövarfiguren på brädet manuellt och stjäl ett kort från en motspelare som vanligt.</li>
+            </ul>
+
+            <h3>🎲 Så här spelar ni rundan</h3>
+            <ul>
+                <li><strong>1. Slå i appen:</strong> Spelaren vars tur det är trycker på "Slå tärningar". Appen visar resursnumret, slumpar en global händelse samt uppdaterar hamnarnas växelkurser.</li>
+                <li><strong>2. Resurser:</strong> Alla spelare samlar råvaror från tärningsslaget som vanligt baserat på sina hus/båtar (tänk på piratblockeringen ovan!).</li>
                 <li><strong>3. Handla (Marknaden):</strong> Under din tur kan du handla med banken i hamnar till de kurser som appen visar just nu (t.ex. 2:1 för Trä om det är hög efterfrågan).</li>
-                <li><strong>4. Loggboken:</strong> Du kan betala 1 lamm + 1 vete till banken för att dra en hemlig skattkarta, eller utmana spökpiraten om du står på en drabbad ruta. Dölj alltid skärmen efteråt!</li>
+                <li><strong>4. Loggboken:</strong> Du kan betala 1 lamm + 1 vete till banken för att dra en hemlig skattkarta i appen. Dölj alltid skärmen efteråt!</li>
             </ul>
             
             <button class="btn" style="margin-top: 15px;" onclick="toggleModal(false)">Skepp ohoj! (Stäng)</button>
@@ -416,7 +428,7 @@
                 
                 const pirateHex = Math.floor(Math.random() * 11) + 2;
                 if (pirateHex !== 7) {
-                    roundEvent += `<br><br><span style='color: #ff9800; font-weight: bold;'>游 Spökpiraten har siktats nära rutor med siffra: ${pirateHex}! Gäller ej på huvudön.</span>`;
+                    roundEvent += `<br><br><span style='color: #ff9800; font-weight: bold;'>⛵ Spökpiraten har siktats nära rutor med siffra: ${pirateHex}! Gäller ej på huvudön.</span>`;
                 }
             }
 
