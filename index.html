@@ -207,30 +207,34 @@
     }
 
     // Tärnings- och eventlogik
-    function rollDice() {
-        currentRound++;
-        document.getElementById('round-counter').innerText = currentRound;
+function rollDice() {
+    currentRound++;
+    document.getElementById('round-counter').innerText = currentRound;
 
-        // Slå två oberoende tärningar för korrekt Catan-sannolikhet (klockkurva)
-        const d1 = Math.floor(Math.random() * 6) + 1;
-        const d2 = Math.floor(Math.random() * 6) + 1;
-        const total = d1 + d2;
+    // Slå två oberoende tärningar för korrekt Catan-sannolikhet
+    const d1 = Math.floor(Math.random() * 6) + 1;
+    const d2 = Math.floor(Math.random() * 6) + 1;
+    const total = d1 + d2;
 
-        document.getElementById('die1').innerText = d1;
-        document.getElementById('die2').innerText = d2;
-        document.getElementById('dice-total').innerText = total;
+    document.getElementById('die1').innerText = d1;
+    document.getElementById('die2').innerText = d2;
+    document.getElementById('dice-total').innerText = total;
 
-        // Logik för händelse-trigger
-        if (total === 7) {
-            triggerEvent("Rövaren aktiveras + Event!", "Rövaren flyttas som vanligt. Dessutom slår vädret om: Alla spelare med fler än 7 kort måste kasta hälften.");
-        } else if (currentRound % 4 === 0) { // Triggar ett slumpmässigt event var 4:e runda
-            const randomIndex = Math.floor(Math.random() * catanEvents.length);
-            const randomEvent = catanEvents[randomIndex];
-            triggerEvent(randomEvent.title, randomEvent.desc);
-        } else {
-            triggerEvent("Vanlig produktion", "Råvaror delas ut som vanligt för nummer " + total + ".");
-        }
+    // 1. Kolla först om det blev en 7:a (Rövaren har alltid företräde i Catan)
+    if (total === 7) {
+        triggerEvent("Rövaren aktiveras + Event!", "Rövaren flyttas som vanligt. Dessutom slår vädret om: Alla spelare med fler än 7 kort måste kasta hälften.");
     }
+    // 2. Om det INTE blev en 7:a, kolla om vi ska slumpa fram ett event (25% chans = snitt var 4:e runda)
+    else if (Math.random() < 0.25) {
+        const randomIndex = Math.floor(Math.random() * catanEvents.length);
+        const randomEvent = catanEvents[randomIndex];
+        triggerEvent(randomEvent.title, randomEvent.desc);
+    }
+    // 3. Annars händer ingenting speciellt
+    else {
+        triggerEvent("Vanlig produktion", "Råvaror delas ut som vanligt för nummer " + total + ".");
+    }
+}
 
     function triggerEvent(title, desc) {
         document.getElementById('event-title').innerText = title;
