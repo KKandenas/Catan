@@ -197,4 +197,249 @@
         .log-screen {
             flex: 1;
             font-family: monospace;
-            font-size: 0.85
+            font-size: 0.85rem;
+            color: #8bbcd8;
+            overflow-y: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+            white-space: pre-line;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(3, 5, 10, 0.95);
+            align-items: center; justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--panel-blue);
+            border: 1px solid var(--text-color);
+            border-radius: 8px;
+            padding: 25px;
+            width: 90%;
+            max-width: 750px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(0, 225, 255, 0.2);
+        }
+
+        .modal h3 {
+            color: var(--gold-color);
+            margin-top: 20px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 4px;
+        }
+        .modal h3:first-of-type { margin-top: 0; }
+        .modal ul { margin-left: 20px; margin-bottom: 15px; }
+        .modal li { margin-bottom: 6px; font-size: 0.9rem; line-height: 1.4; color: #ceddf0; }
+
+        .close-modal {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--alert-red);
+        }
+
+        .impact-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(255, 51, 51, 0.3);
+            animation: flash 0.5s infinite alternate;
+            z-index: 100;
+            pointer-events: none;
+        }
+        @keyframes flash { from { opacity: 1; } to { opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <div class="impact-overlay" id="alert-flash"></div>
+
+    <header>
+        <h1>☄️ CATAN: METEOR DEFENSE INTERFACE</h1>
+        <div class="handbook-btn" onclick="toggleModal(true)">📋 Systemhandbok (Regler)</div>
+    </header>
+
+    <div class="control-room">
+        
+        <div class="side-panel">
+            <div class="sci-fi-box">
+                <h3 style="font-size:0.85rem; text-transform:uppercase; margin-bottom:5px; color:var(--text-color);">🛰️ Skanna Bana</h3>
+                <div class="dice-container">
+                    <div id="die1" class="die">?</div>
+                    <div id="die2" class="die">?</div>
+                </div>
+                <button class="btn btn-alert" onclick="scanOrbit()">Slå & Beräkna Närmande</button>
+            </div>
+
+            <div class="sci-fi-box flex-grow">
+                <h3 style="font-size:0.85rem; text-transform:uppercase; margin-bottom:10px; color:var(--text-color);">📊 Telemetrilogg</h3>
+                <div class="log-screen" id="log-text">
+                    [SYSTEM ONLINE] 
+                    Väntar på banberäkning...
+                </div>
+            </div>
+        </div>
+
+        <div class="radar-center">
+            <div class="radar-screen">
+                <div class="radar-sweep"></div>
+                <div class="radar-grid"></div>
+                <div class="radar-grid-inner"></div>
+                <div style="position:absolute; width:14px; height:14px; background:#33e1ff; border-radius:50%; box-shadow:0 0 12px #33e1ff;"></div>
+                <div id="meteor" class="meteor-dot" style="top: 30px; left: 180px;"></div>
+            </div>
+
+            <div class="distance-display">
+                <p style="font-size: 0.75rem; text-transform: uppercase; color: #8bbcd8;">Tid till atmosfärisk kollision</p>
+                <div class="distance-val" id="distance-output">35 000 km</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 80%; margin-top: 20px;">
+                <button class="btn" style="border-color:var(--radar-green); color:var(--radar-green);" onclick="activateLaser()">📡 Aktivera Planetlaser<br><span style="font-size:0.7rem; text-transform:none;">(Kostar 2 Malm från valfri spelare)</span></button>
+                <button class="btn" style="border-color:var(--gold-color); color:var(--gold-color);" onclick="buildBunker()">🛡️ Driftsätt Sköldkupol<br><span style="font-size:0.7rem; text-transform:none;">(Kostar 1 Malm + 1 Lera)</span></button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="rules-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleModal(false)">&times;</span>
+            
+            <h3>🎯 Vad spelet går ut på</h3>
+            <ul>
+                <li><strong>Målet:</strong> En meteorit är på kollisionskurs med Catan. Spelarnas mål är fortfarande att nå <strong>10 vinstpoäng</strong> genom att bygga sitt rymdimperium, men ni måste samtidigt samarbeta för att hålla meteoren borta!</li>
+                <li><strong>Kollisionen:</strong> Varje gång tärningarna slås i appen rör sig meteoren närmare. Om distansen når 0 km sker ett <strong>meteorinedslag</strong>. En slumpmässig siffra drabbas, och den landbrickan vänds uppochned på bordet – den är permanent förstörd.</li>
+                <li><strong>Gemensam Förlust:</strong> Om 4 landbrickor blir totalförstörda kollapsar Catans biosfär, och <strong>alla spelare förlorar gemensamt</strong> mot spelet!</li>
+            </ul>
+
+            <h3>💥 Meteoritnedslag &amp; Förödelse</h3>
+            <ul>
+                <li><strong>Utplåning av sektor:</strong> När en landbricka vänds uppochned kan den aldrig mer producera resurser.</li>
+                <li><strong>Byar &amp; Städer slås ut:</strong> Alla byar (Evakueringskapslar) och städer (Moderskepp) som gränsar till den drabbade brickan blir <strong>skadade</strong>. Vänd pjäsen på sidan på brädet!</li>
+                <li><strong>Effekt av skada:</strong> En skadad byggnad ger <em>ingen produktion alls</em> (inte ens från sina andra intakta grannbrickor) och räknas <em>inte</em> längre som vinstpoäng.</li>
+                <li><strong>Reparation:</strong> Du kan reparera en skadad byggnad på din tur genom att betala <strong>1 Vete + 1 Ull</strong> till banken. Ställ pjäsen upp igen för att återfå poäng och produktion.</li>
+                <li><strong>Vägar blockeras:</strong> Vägar längs den utplånade brickans kanter klarar sig, men blir blockerade av rymdgrus och kan inte byggas vidare ifrån.</li>
+            </ul>
+
+            <h3>🛡️ Undantaget: Sköldkupolen (Bunkern)</h3>
+            <ul>
+                <li><strong>Fullt skydd:</strong> Om du köper en <strong>Sköldkupol</strong> via appen och placerar den på en korsning, blir din by/stad helt immun mot meteoritnedslag.</li>
+                <li><strong>Funktion vid nedslag:</strong> Om pjäsen gränsar till en drabbad ruta står den kvar upprätt, behåller sina vinstpoäng och fortsätter producera resurser från sina <em>andra</em> fungerande grannbrickor.</li>
+            </ul>
+
+            <h3>⚙️ Resursernas Funktioner</h3>
+            <ul>
+                <li><strong>Malm (Vapenkomponenter):</strong> Betala 2 Malm till banken och tryck på <em>"Aktivera Planetlaser"</em> för att trycka bort meteoren (+5 000 km) på radarn.</li>
+                <li><strong>Lera (Bunkerbetong):</strong> Kombineras med 1 Malm för att trycka på <em>"Driftsätt Sköldkupol"</em> och skydda en valfri korsning permanent.</li>
+                <li><strong>Trä (Bärbalkar):</strong> Krävs för att bygga <em>Evakueringsramper</em> (Vägar) för att expandera till säkrare områden.</li>
+                <li><strong>Vete (Rymdproviant):</strong> Krävs för att bygga och expandera <em>Evakueringskapslar</em> (Byar) och <em>Moderskepp</em> (Städer).</li>
+                <li><strong>Ull (Isolering/Dräkter):</strong> Används för att köpa <em>Forskningskort</em> (Utvecklingskort) i jakt på dolda teknologier.</li>
+            </ul>
+
+            <h3>🚨 Särskilda Tärningshändelser</h3>
+            <ul>
+                <li><strong>En 7:a (Solstorm):</strong> Rövaren flyttas inte. Istället slår en elektromagnetisk storm ut all kommunikation. Ingen får handla med hamnar eller med varandra under denna runda.</li>
+                <li><strong>2 eller 12 (Kosmiskt damm):</strong> Siffran som slås blockeras tillfälligt av kosmiskt avfall och ger ingen produktion denna runda.</li>
+            </ul>
+
+            <button class="btn btn-main" style="margin-top: 15px; border-color:var(--gold-color); color:var(--gold-color);" onclick="toggleModal(false)">Återvänd till kontrollrummet</button>
+        </div>
+    </div>
+
+    <script>
+        let distance = 35000;
+        const logElement = document.getElementById('log-text');
+        const meteorElement = document.getElementById('meteor');
+
+        const meteorSteps = [
+            { top: "30px", left: "180px" },
+            { top: "65px", left: "130px" },
+            { top: "100px", left: "220px" },
+            { top: "140px", left: "150px" },
+            { top: "165px", left: "195px" }
+        ];
+        let currentStep = 0;
+
+        function scanOrbit() {
+            const d1 = Math.floor(Math.random() * 6) + 1;
+            const d2 = Math.floor(Math.random() * 6) + 1;
+            const total = d1 + d2;
+
+            document.getElementById('die1').innerText = d1;
+            document.getElementById('die2').innerText = d2;
+
+            distance -= 5000;
+            if (distance <= 0) {
+                triggerImpact();
+            } else {
+                document.getElementById('distance-output').innerText = distance.toLocaleString() + " km";
+                
+                if (currentStep < meteorSteps.length - 1) {
+                    currentStep++;
+                    meteorElement.style.top = meteorSteps[currentStep].top;
+                    meteorElement.style.left = meteorSteps[currentStep].left;
+                }
+
+                let logMsg = `\n[TÄRNING: ${total}] Avstånd minskar!`;
+                if (total === 7) {
+                    logMsg += `\n⚠️ SOLSTORM: Elektroniken utslagen! Ingen handel tillåten denna runda.`;
+                } else if (total === 2 || total === 12) {
+                    logMsg += `\n🛰️ STÖRNING: Kosmiskt damm blockerar produktion på siffra [${total}].`;
+                } else {
+                    logMsg += `\nNormal resursfördelning för siffra ${total}.`;
+                }
+
+                logElement.innerText = logMsg + "\n" + logElement.innerText;
+            }
+        }
+
+        function triggerImpact() {
+            document.getElementById('distance-output').innerText = "KOLLISION SEKTOR INDIKERAD";
+            document.getElementById('alert-flash').style.display = "block";
+            
+            const targetSector = [2, 3, 4, 5, 6, 8, 9, 10, 11, 12][Math.floor(Math.random() * 10)];
+            
+            logElement.innerHTML = `<span style="color:var(--alert-red); font-weight:bold;">💥 METEORITNEDSLAG!\nMeteoren träffade siffra [${targetSector}].\nSKADADE BYAR/STÄDER runt siffra ${targetSector} vänds på sidan!\nLandbrickan är permanent utplånad.</span>\n\n` + logElement.innerHTML;
+
+            distance = 35000;
+            currentStep = 0;
+            meteorElement.style.top = meteorSteps[0].top;
+            meteorElement.style.left = meteorSteps[0].left;
+            
+            setTimeout(() => {
+                document.getElementById('alert-flash').style.display = "none";
+            }, 3000);
+        }
+
+        function activateLaser() {
+            distance += 5000;
+            if (distance > 35000) distance = 35000;
+            document.getElementById('distance-output').innerText = distance.toLocaleString() + " km";
+            
+            if (currentStep > 0) {
+                currentStep--;
+                meteorElement.style.top = meteorSteps[currentStep].top;
+                meteorElement.style.left = meteorSteps[currentStep].left;
+            }
+
+            logElement.innerHTML = `<span style="color:var(--radar-green);">📡 PLANETLASER AVFYRAD!\nMeteoren har bromsats och skjutits tillbaka (+5 000 km).</span>\n` + logElement.innerHTML;
+        }
+
+        function buildBunker() {
+            logElement.innerHTML = `<span style="color:var(--gold-color);">🛡️ SKÖLDKUPOL DRIFTSATT!\nVälj en valfri korsning (by/stad) på brädet. Den skyddas nu permanent mot meteoritnedslag.</span>\n` + logElement.innerHTML;
+        }
+
+        function toggleModal(show) {
+            document.getElementById('rules-modal').style.display = show ? "flex" : "none";
+        }
+    </script>
+</body>
+</html>
