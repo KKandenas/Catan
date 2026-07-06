@@ -205,6 +205,18 @@
             white-space: pre-line;
         }
 
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 85%;
+            margin-top: 25px;
+        }
+
+        .btn-fullwidth {
+            grid-column: span 2;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -301,9 +313,10 @@
                 <div class="distance-val" id="distance-output">35 000 km</div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 80%; margin-top: 20px;">
+            <div class="action-grid">
                 <button class="btn" style="border-color:var(--radar-green); color:var(--radar-green);" onclick="activateLaser()">📡 Aktivera Planetlaser<br><span style="font-size:0.7rem; text-transform:none;">(Kostar 2 Malm från valfri spelare)</span></button>
                 <button class="btn" style="border-color:var(--gold-color); color:var(--gold-color);" onclick="buildBunker()">🛡️ Driftsätt Sköldkupol<br><span style="font-size:0.7rem; text-transform:none;">(Kostar 1 Malm + 1 Lera)</span></button>
+                <button class="btn btn-fullwidth" style="border-color:#ff9933; color:#ff9933; margin-top: 5px;" onclick="repairStructure()">🔧 Reparera Byggnad<br><span style="font-size:0.7rem; text-transform:none;">(Kostar 1 Vete + 1 Ull &mdash; Res ut skadad By/Stad)</span></button>
             </div>
         </div>
 
@@ -347,7 +360,7 @@
             <h3>🚨 Särskilda Tärningshändelser</h3>
             <ul>
                 <li><strong>En 7:a (Solstorm):</strong> Rövaren flyttas inte. Istället slår en elektromagnetisk storm ut all kommunikation. Ingen får handla med hamnar eller med varandra under denna runda.</li>
-                <li><strong>2 eller 12 (Kosmisk Kedjereaktion):</strong> Ger <strong>DUBBEL PRODUKTION</strong> till alla som har byggt där denna runda på grund av en energispik. Men meteoren dras till spiken och tar <strong>två steg framåt direkt (-10 000 km)</strong>!</li>
+                <li><strong>2 eller 12 (Kosmisk Kedjereaktion):</strong> Ger <strong>DUBBEL PRODUKTION</strong> till alla som har byggt där denna runda på grund av en energispik. But meteoren dras till spiken och tar <strong>två steg framåt direkt (-10 000 km)</strong>!</li>
             </ul>
 
             <button class="btn btn-main" style="margin-top: 15px; border-color:var(--gold-color); color:var(--gold-color);" onclick="toggleModal(false)">Återvänd till kontrollrummet</button>
@@ -359,7 +372,6 @@
         const logElement = document.getElementById('log-text');
         const meteorElement = document.getElementById('meteor');
 
-        // Fler steg för jämnare animering och stöd för dubbelsteg
         const meteorSteps = [
             { top: "30px", left: "180px" },
             { top: "50px", left: "155px" },
@@ -446,6 +458,10 @@
 
         function buildBunker() {
             logElement.innerHTML = `<span style="color:var(--gold-color);">🛡️ SKÖLDKUPOL DRIFTSATT!\nVälj en valfri korsning (by/stad) på brädet. Den skyddas nu permanent mot meteoritnedslag.</span>\n` + logElement.innerHTML;
+        }
+
+        function repairStructure() {
+            logElement.innerHTML = `<span style="color:#ff9933;">🔧 REPARATION UTFÖRD!\n1 Vete och 1 Ull har betalats till banken. Välj en skadad By eller Stad och res pjäsen upp igen på brädet.</span>\n` + logElement.innerHTML;
         }
 
         function toggleModal(show) {
