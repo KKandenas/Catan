@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catan Noir (iPad Edition)</title>
+    <style>
+        :root {
+            --bg-color: #0d0d0f;
+            --card-bg: #18181c;
+            --accent-color: #ff3344; /* Neonröd/Blodröd */
+            --gold-color: #d4af37;
+            --text-color: #e2e2e6;
+            --text-dim: #8a8a93;
+            --border-color: #2a2a32;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace; /* Noir-känsla via skrivmaskinstext */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: #121215;
+            padding: 12px 25px;
+            border-bottom: 2px solid var(--accent-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px rgba(255, 51, 68, 0.4);
+        }
+
+        .rules-link {
+            color: var(--gold-color);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: 1px solid var(--gold-color);
+            padding: 6px 14px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Dashboard Grid för iPad */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1.2fr;
+            gap: 15px;
+            padding: 15px;
+            flex: 1;
+            height: calc(100vh - 60px);
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: 100%;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 18px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flex-grow {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        h2 {
+            font-size: 1.05rem;
+            margin-bottom: 12px;
+            color: var(--gold-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Tärningsbox */
+        .dice-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #18181c 0%, #101013 100%);
+        }
+
+        .dice-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .die {
+            width: 55px;
+            height: 55px;
+            background-color: #2e2e36;
+            color: #fff;
+            border: 2px solid #444;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .die.crimson {
+            background-color: #801018;
+            border-color: var(--accent-color);
+            color: #fff;
+        }
+
+        #dice-total {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-shadow: 0 0 10px rgba(255, 51, 68, 0.3);
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        /* Knappar */
+        .btn {
+            background-color: #2e2e36;
+            color: var(--text-color);
+            border: 1px solid #444;
+            padding: 12px 15px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:active {
+            background-color: #222228;
+        }
+
+        .btn-main {
+            background-color: var(--accent-color);
+            color: #fff;
+            border: none;
+        }
+        
+        .btn-main:active {
+            background-color: #cc2433;
+        }
+
+        .btn-secondary {
+            border: 1px solid var(--gold-color);
+            color: var(--gold-color);
+            background: transparent;
+        }
+
+        /* Knappar i rad */
+        .btn-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .btn-row .btn {
+            padding: 10px 5px;
+            font-size: 0.8rem;
+        }
+
+        /* Svarta Marknaden Tabell */
+        .market-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .market-table th, .market-table td {
+            padding: 9px 6px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        .market-table th {
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .trend-up { color: #33cc66; font-weight: bold; }
+        .trend-down { color: #ff3344; font-weight: bold; }
+        .trend-stable { color: var(--text-dim); }
+
+        /* Tidningsnotiser och Hemligheter */
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #chronicle-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            overflow-y: auto;
+            white-space: pre-line;
+        }
+
+        .secret-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .secret-box {
+            background-color: #09090b;
+            border: 1px dashed var(--gold-color);
+            padding: 12px;
+            border-radius: 4px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+        }
+
+        .secret-text-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--gold-color);
+            border-radius: 6px;
+            padding: 25px;
+            width: 85%;
+            max-width: 750px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal h3 {
+            color: var(--gold-color);
+            margin-top: 20px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .modal h3:first-of-type { margin-top: 0; }
+        .modal ul { margin-left: 20px; margin-bottom: 15px; }
+        .modal li { margin-bottom: 8px; font-size: 0.9rem; line-height: 1.4; }
+
+        .close-modal {
+            float: right;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-dim);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🕵️‍♂️ CATAN NOIR: STADENS SYNDIKAT 🕵️‍♂️</h1>
+        <div class="rules-link" onclick="toggleModal(true)">📋 Regler & Konvertering</div>
+    </header>
+
+    <div class="dashboard">
+        
+        <!-- KOLUMN 1: THE DAILY CHRONICLE -->
+        <div class="column">
+            <div class="card flex-grow">
+                <h2>The Daily Chronicle</h2>
+                <div class="content-wrapper">
+                    <div id="chronicle-text">Slå tärningarna i gränden för att trycka morgonens tidning och starta spelet...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KOLUMN 2: TÄRNINGAR & SVARTA MARKNADEN -->
+        <div class="column">
+            <div class="card dice-box">
+                <div class="dice-container">
+                    <div id="die1" class="die">?</div>
+                    <div id="die2" class="die crimson">?</div>
+                </div>
+                <div id="dice-total">Noir</div>
+                <button class="btn btn-main" onclick="rollRound()">Rulla Tärningarna</button>
+            </div>
+
+            <div class="card flex-grow">
+                <h2>Svarta Marknaden (Kurser)</h2>
+                <table class="market-table">
+                    <thead>
+                        <tr>
+                            <th>Smuggelgods</th>
+                            <th>Pris</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="market-body">
+                        <!-- Fylls med JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- KOLUMN 3: DETEKTIVENS ANTECKNINGSBOK -->
+        <div class="column">
+            <div class="card flex-grow">
+                <h2>Skumraskaffärer</h2>
+                <div class="content-wrapper">
+                    <p style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 12px;">Sköt dina mutor och hemliga jobb här. Dölj alltid skärmen efteråt.</p>
+                    
+                    <div class="btn-row">
+                        <button class="btn" onclick="buyBlackmail()">Pressa Någon<br><span style="font-size:0.7rem; color:var(--text-dim); font-weight:normal; text-transform:none;">(1 Info + 1 Muta)</span></button>
+                        <button class="btn btn-secondary" onclick="hireHitman()">Anlita Torped<br><span style="font-size:0.7rem; color:var(--gold-color); font-weight:normal; text-transform:none;">(Slåss mot polisen)</span></button>
+                    </div>
+                    
+                    <div class="secret-container" id="secret-container" style="display:none;">
+                        <div class="secret-box">
+                            <button class="btn" style="background:#222; border-color:#333; font-size:0.75rem; padding:6px;" onclick="hideSecret()">❌ Dölj akten för nästa spelare</button>
+                            <div class="secret-text-area" id="secret-content">
+                                <!-- Hemlig info -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL FÖR REGLER -->
+    <div id="rules-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleModal(false)">&times;</span>
+            
+            <h3>🌆 Resurskonvertering (Från klassiska Catan)</h3>
+            <ul>
+                <li><strong>Kontanter ($):</strong> Ersätter <em>Trä</em> (Skog).</li>
+                <li><strong>Sprit / Smuggelgods:</strong> Ersätter <em>Lera</em> (Lervall).</li>
+                <li><strong>Information / Dokument:</strong> Ersätter <em>Vete</em> (Åker).</li>
+                <li><strong>Mutor:</strong> Ersätter <em>Lamm</em> (Betesmark).</li>
+                <li><strong>Vapen / Tungt skydd:</strong> Ersätter <em>Malm</em> (Berg).</li>
+            </ul>
+
+            <h3>🏢 Byggnadsnycklar</h3>
+            <ul>
+                <li><strong>Vägar ➡️ Territorium/Gathörn:</strong> Krävs för att binda ihop dina kvarter.</li>
+                <li><strong>Byar ➡️ Svartklubbar (Safehouses):</strong> Ger 1 resurskort vid matchande tärningsslag.</li>
+                <li><strong>Städer ➡️ Syndikat (Högkvarter):</strong> Ger 2 resurskort vid matchande tärningsslag.</li>
+                <li><strong>Riddarkort ➡️ Torpeder:</strong> Används för att flytta polischefen.</li>
+            </ul>
+
+            <h3>🚨 Polischefens Razzior (Rövaren)</h3>
+            <ul>
+                <li>När appen slår en <strong>7:a</strong> slår polisen till! Flytta den fysiska rövarfiguren på spelplanen och stjäl ett kort från en rival som vanligt. Alla med mer än 7 kort på hand förlorar hälften till polisen.</li>
+                <li>Varje vanlig runda skickar polischefen dessutom ut patruller till den stadsdel (siffra) som nämns längst ner i tidningen. Där är produktionen helt blockerad just nu!</li>
+            </ul>
+
+            <button class="btn btn-main" style="margin-top: 15px;" onclick="toggleModal(false)">Tillbaka till gatan</button>
+        </div>
+    </div>
+
+    <script>
+        const newsHeadlines = [
+            "📰 POLISRAZZIA I HAMNEN!\nSprit och smuggelgods beslagtaget. Ingen produktion från Sprit-rutor denna runda.",
+            "📰 GÄNGKRIG UTBRUTET!\nSyndikaten drabbar samman. Spelaren med flest Torpeder (riddarkort) får direkt 2 valfria resurskort från banken.",
+            "📰 KORRUPTION PÅ HÖG NIVÅ!\nBorgmästaren tar emot mutor. Den som har flest Mutor-kort på hand får genast bygga ett gathörn (väg) gratis.",
+            "📰 REKORDSTORT BANKRÅN!\nKontanter flödar på gatorna. Alla spelare får direkt 1 valfritt Kontant-kort ($).",
+            "📰 STYV KULING I SMUGGLARVIKEN!\nLastbåtar har svårt att lägga till. Det går inte att handla via hamnar denna runda.",
+            "📰 TJALLARE I OMLOPP!\nInformation säljs dyrt på hörnen. Information-rutor ger dubbel produktion till Svartklubbar denna runda.",
+            "📰 STRÄNGARE UTREGLINGSFÖRBUD!\nPolisen patrullerar extra noga. Det kostar 1 extra Kontant ($) att bygga gathörn (vägar) denna runda."
+        ];
+
+        const blackmailFiles = [
+            "📂 UTRESSNINGSMATERIAL:\nDu har komprometterande foton på domarens utsvävningar. Tvinga valfri spelare att ge dig 2 Kontanter ($).",
+            "📂 UTRESSNINGSMATERIAL:\nDu sitter på förfalskade bokföringsdokument. Pressa spelaren till höger på 2 valfria resurskort.",
+            "📂 HEMLIGT AVTAL:\nDu har mutat chefen för stadsplaneringen. Du får flytta ett av dina gathörn (vägar) till en ny valfri ledig plats på brädet.",
+            "📂 SKUMT TIPS:\nEtt kassaskåp står olåst i industrikvarteret. Ta genast 2 valfria Vapen/Tungt skydd-kort från banken."
+        ];
+
+        const resourceNames = ["Kontanter ($)", "Sprit", "Information", "Mutor", "Vapen"];
+
+        function rollRound() {
+            const d1 = Math.floor(Math.random() * 6) + 1;
+            const d2 = Math.floor(Math.random() * 6) + 1;
+            const total = d1 + d2;
+
+            document.getElementById('die1').innerText = d1;
+            document.getElementById('die2').innerText = d2;
+            document.getElementById('dice-total').innerText = total;
+
+            let headline = "";
+            if (total === 7) {
+                headline = "🚨 POLISCHEFEN SLÅR TILL! (En sjua)\nStora razzior över hela staden. Alla med mer än 7 kort förlorar hälften. Flytta den fysiska polischefen och stjäl ett kort från en rival.";
+            } else {
+                headline = newsHeadlines[Math.floor(Math.random() * newsHeadlines.length)];
+                
+                const blockedDistrict = Math.floor(Math.random() * 11) + 2;
+                if (blockedDistrict !== 7) {
+                    headline += `\n\n⚠️ REGIONAL BLOCKAD:\nPolisen har spärrat av kvarteren runt siffra [${blockedDistrict}]. Ingen produktion därifrån denna runda!`;
+                }
+            }
+
+            document.getElementById('chronicle-text').innerText = headline;
+            generateMarket();
+            hideSecret();
+        }
+
+        function generateMarket() {
+            const tbody = document.getElementById('market-body');
+            tbody.innerHTML = "";
+
+            resourceNames.forEach(res => {
+                const rate = Math.floor(Math.random() * 3) + 2;
+                let trend = "⚡ Stabil";
+                let trendClass = "trend-stable";
+
+                if (rate === 2) { trend = "▲ Eftertraktad"; trendClass = "trend-up"; }
+                if (rate === 4) { trend = "▼ Överskott"; trendClass = "trend-down"; }
+
+                const row = `<tr>
+                    <td><strong>${res}</strong></td>
+                    <td>${rate}:1</td>
+                    <td class="${trendClass}">${trend}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function buyBlackmail() {
+            const container = document.getElementById('secret-container');
+            const content = document.getElementById('secret-content');
+            const file = blackmailFiles[Math.floor(Math.random() * blackmailFiles.length)];
+            
+            content.innerHTML = `<p style='color:var(--gold-color); font-weight:bold; margin-bottom:5px;'>HEMLIG AKT:</p><p style='white-space:pre-line;'>${file}</p>`;
+            container.style.display = "flex";
+        }
+
+        function hireHitman() {
+            const container = document.getElementById('secret-container');
+            const content = document.getElementById('secret-content');
+            
+            const playerRoll = Math.floor(Math.random() * 6) + 1;
+            const policeRoll = Math.floor(Math.random() * 6) + 1;
+            
+            let resultText = "";
+            if (playerRoll >= policeRoll) {
+                resultText = `⚡ <span style='color:#33cc66; font-weight:bold;'>SEGER!</span> Din torped mutade bort eller hotade snuten. Du får flytta polischefen till valfri ruta och stjäla 1 kort från en spelare runt den rutan.\n(Du: ${playerRoll} vs Polisen: ${policeRoll})`;
+            } else {
+                resultText = `💥 <span style='color:#ff3344; font-weight:bold;'>MISSLYCKANDE!</span> Snuten vägrade backa. Betala 2 valfria kort till banken i böter eller förlora ett gathörn (väg).\n(Du: ${playerRoll} vs Polisen: ${policeRoll})`;
+            }
+
+            content.innerHTML = `<p style='color:var(--gold-color); font-weight:bold; margin-bottom:5px;'>UPPDRAGETS UTGÅNG:</p><p style='white-space:pre-line;'>${resultText}</p>`;
+            container.style.display = "flex";
+        }
+
+        function hideSecret() {
+            document.getElementById('secret-container').style.display = "none";
+            document.getElementById('secret-content').innerHTML = "";
+        }
+
+        function toggleModal(show) {
+            document.getElementById('rules-modal').style.display = show ? "flex" : "none";
+        }
+
+        // Första uppstart
+        generateMarket();
+    </script>
+</body>
+</html>
