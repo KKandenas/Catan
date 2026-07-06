@@ -347,7 +347,7 @@
             <h3>🚨 Särskilda Tärningshändelser</h3>
             <ul>
                 <li><strong>En 7:a (Solstorm):</strong> Rövaren flyttas inte. Istället slår en elektromagnetisk storm ut all kommunikation. Ingen får handla med hamnar eller med varandra under denna runda.</li>
-                <li><strong>2 eller 12 (Kosmiskt damm):</strong> Siffran som slås blockeras tillfälligt av kosmiskt avfall och ger ingen produktion denna runda.</li>
+                <li><strong>2 eller 12 (Kosmisk Kedjereaktion):</strong> Ger <strong>DUBBEL PRODUKTION</strong> till alla som har byggt där denna runda på grund av en energispik. Men meteoren dras till spiken och tar <strong>två steg framåt direkt (-10 000 km)</strong>!</li>
             </ul>
 
             <button class="btn btn-main" style="margin-top: 15px; border-color:var(--gold-color); color:var(--gold-color);" onclick="toggleModal(false)">Återvänd till kontrollrummet</button>
@@ -359,10 +359,13 @@
         const logElement = document.getElementById('log-text');
         const meteorElement = document.getElementById('meteor');
 
+        // Fler steg för jämnare animering och stöd för dubbelsteg
         const meteorSteps = [
             { top: "30px", left: "180px" },
-            { top: "65px", left: "130px" },
+            { top: "50px", left: "155px" },
+            { top: "75px", left: "135px" },
             { top: "100px", left: "220px" },
+            { top: "120px", left: "180px" },
             { top: "140px", left: "150px" },
             { top: "165px", left: "195px" }
         ];
@@ -376,23 +379,31 @@
             document.getElementById('die1').innerText = d1;
             document.getElementById('die2').innerText = d2;
 
-            distance -= 5000;
+            let stepCost = 1;
+            let kmReduction = 5000;
+
+            if (total === 2 || total === 12) {
+                stepCost = 2;
+                kmReduction = 10000;
+            }
+
+            distance -= kmReduction;
             if (distance <= 0) {
                 triggerImpact();
             } else {
                 document.getElementById('distance-output').innerText = distance.toLocaleString() + " km";
                 
-                if (currentStep < meteorSteps.length - 1) {
-                    currentStep++;
-                    meteorElement.style.top = meteorSteps[currentStep].top;
-                    meteorElement.style.left = meteorSteps[currentStep].left;
-                }
+                currentStep += stepCost;
+                if (currentStep > meteorSteps.length - 1) currentStep = meteorSteps.length - 1;
+                
+                meteorElement.style.top = meteorSteps[currentStep].top;
+                meteorElement.style.left = meteorSteps[currentStep].left;
 
                 let logMsg = `\n[TÄRNING: ${total}] Avstånd minskar!`;
                 if (total === 7) {
                     logMsg += `\n⚠️ SOLSTORM: Elektroniken utslagen! Ingen handel tillåten denna runda.`;
                 } else if (total === 2 || total === 12) {
-                    logMsg += `\n🛰️ STÖRNING: Kosmiskt damm blockerar produktion på siffra [${total}].`;
+                    logMsg += `\n⚡ KEDJEREAKTION: Dubbel produktion på [${total}]! Men meteoren rusar framåt (-10 000 km)!`;
                 } else {
                     logMsg += `\nNormal resursfördelning för siffra ${total}.`;
                 }
