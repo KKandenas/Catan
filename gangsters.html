@@ -12,11 +12,11 @@
             --text-muted: #777;
             --border-color: #222;
             
-            /* Kortlekens färger (Svarta vs Röda gäng) */
-            --spades-color: #2b5c8f;   /* Svart gäng (Mörkblå profil) */
-            --clovers-color: #3a6b5c;  /* Svart gäng (Mörkgrön/grå profil) */
-            --hearts-color: #d93838;   /* Rött gäng (Klar röd) */
-            --diamonds-color: #e67e22; /* Rött gäng (Brandgul/röd profil) */
+            /* Fyra unika gängfärger */
+            --spades-color: #3a86ff;   
+            --clovers-color: #38b000;  
+            --hearts-color: #ff006e;   
+            --diamonds-color: #ffbe0b; 
         }
 
         * {
@@ -40,7 +40,7 @@
             gap: 15px;
         }
 
-        /* Förenklade spelarhörn för maximal läsbarhet */
+        /* Spelarhörn */
         .player-corner {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -82,14 +82,16 @@
         }
 
         .deck-suit {
-            font-size: 12px;
-            background: #222;
+            font-size: 10px;
+            background: #1c1c1c;
             padding: 2px 6px;
             border-radius: 4px;
             font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .suit-black { color: #888; }
-        .suit-red { color: #ff4d4d; }
+        .suit-black { color: #888; border: 1px solid #333; }
+        .suit-red { color: #ff4d4d; border: 1px solid #4a1111; }
 
         .stats-grid {
             display: grid;
@@ -118,9 +120,9 @@
             font-weight: bold;
         }
 
-        /* Stor centerkonsol som sväljer alla knappar */
+        /* Centerkonsol */
         .center-console {
-            grid-area: 1 / 2 / 4 / 3; /* Sträcker sig över hela mittenraden vertikalt */
+            grid-area: 1 / 2 / 4 / 3;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -150,7 +152,6 @@
 
         #dice-container:active { transform: scale(0.9); }
 
-        /* Gängväljare och Action-panel i mitten */
         .control-panel {
             width: 100%;
             max-width: 440px;
@@ -184,17 +185,18 @@
             font-size: 12px;
             border-radius: 6px;
             color: #aaa;
+            cursor: pointer;
         }
-        .selector-btn.active[data-gang="1"] { background: var(--spades-color); color: white; border-color: #fff; }
-        .selector-btn.active[data-gang="2"] { background: var(--hearts-color); color: white; border-color: #fff; }
-        .selector-btn.active[data-gang="3"] { background: var(--clovers-color); color: white; border-color: #fff; }
-        .selector-btn.active[data-gang="4"] { background: var(--diamonds-color); color: white; border-color: #fff; }
+        .selector-btn.active[data-gang="1"] { background: var(--spades-color); color: black; font-weight:bold; border-color: #fff; }
+        .selector-btn.active[data-gang="2"] { background: var(--hearts-color); color: white; font-weight:bold; border-color: #fff; }
+        .selector-btn.active[data-gang="3"] { background: var(--clovers-color); color: black; font-weight:bold; border-color: #fff; }
+        .selector-btn.active[data-gang="4"] { background: var(--diamonds-color); color: black; font-weight:bold; border-color: #fff; }
 
         .action-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            opacity: 0.3;
+            opacity: 0.2;
             pointer-events: none;
             transition: opacity 0.2s;
         }
@@ -222,11 +224,10 @@
         .btn-pay { background: #2d2510; color: #e6b800; grid-column: span 2; }
         .btn-pay:active { background: #3d3216; }
 
-        /* Sidorader (Håller bara text/info nu) */
-        .side-bar-left { grid-area: 2 / 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
-        .side-bar-right { grid-area: 2 / 3; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+        .side-bar-left { grid-area: 2 / 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #333; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+        .side-bar-right { grid-area: 2 / 3; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #333; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
 
-        /* Popups / Overlays */
+        /* Overlays & Popups */
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -251,15 +252,15 @@
             text-align: center;
         }
 
-        .popup-large { max-width: 750px; height: 80vh; overflow-y: auto; text-align: left; padding: 30px; }
-        .popup-large h2 { color: #3a86ff; text-transform: uppercase; margin: 15px 0 5px 0; font-size: 18px; border-bottom: 1px solid #222; padding-bottom: 3px;}
+        .popup-large { max-width: 750px; height: 85vh; overflow-y: auto; text-align: left; padding: 35px; border-color: #3a86ff; }
+        .popup-large h2 { color: #3a86ff; text-transform: uppercase; margin: 20px 0 8px 0; font-size: 18px; border-bottom: 1px solid #222; padding-bottom: 4px;}
         .popup-large p, .popup-large li { color: #bbb; font-size: 13px; line-height: 1.6; margin-bottom: 8px; }
         .popup-large ul { padding-left: 15px; }
 
         .popup-dice-badge { background: #222; color: #fff; display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
         .popup-title { color: #ff4d4d; font-size: 22px; text-transform: uppercase; margin-bottom: 10px; }
         .popup-desc { font-size: 14px; line-height: 1.5; color: #ccc; margin-bottom: 20px; }
-        .popup-btn { background: #333; color: white; font-size: 14px; padding: 10px; border-radius: 6px; width: 100%; }
+        .popup-btn { background: #3a86ff; color: white; font-size: 14px; padding: 12px; border-radius: 6px; width: 100%; font-weight: bold; }
 
         .pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; text-align: left; }
         .pay-grid label { display: block; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
@@ -268,11 +269,11 @@
 </head>
 <body>
 
-    <!-- SPELARE 1: SPADER (SVART) -->
+    <!-- SPELARE 1: SPADER -->
     <div class="player-corner" id="p1">
         <div class="gang-header">
             <div class="gang-title">♠ Nightspades</div>
-            <div class="deck-suit suit-black">SVART KORT</div>
+            <div class="deck-suit suit-black">Svart kulör</div>
         </div>
         <div class="stats-grid">
             <div class="stat-box"><div class="stat-label">Bank</div><div class="stat-value" id="p1-bank">$300</div></div>
@@ -281,11 +282,11 @@
         </div>
     </div>
 
-    <!-- SPELARE 2: HJÄRTER (RÖD) -->
+    <!-- SPELARE 2: HJÄRTER -->
     <div class="player-corner" id="p2">
         <div class="gang-header">
             <div class="gang-title">♥ Crimson Hearts</div>
-            <div class="deck-suit suit-red">RÖTT KORT</div>
+            <div class="deck-suit suit-red">Röd kulör</div>
         </div>
         <div class="stats-grid">
             <div class="stat-box"><div class="stat-label">Bank</div><div class="stat-value" id="p2-bank">$300</div></div>
@@ -294,16 +295,14 @@
         </div>
     </div>
 
-    <!-- VÄNSTER OCH HÖGER SIDA (INFO) -->
-    <div class="side-bar-left"><span>Noir Syndicate</span><span style="color:#333; margin-top:5px;">v1.5</span></div>
-    <div class="side-bar-right"><span>iPad Control</span><span style="color:#333; margin-top:5px;">Board Hub</span></div>
+    <div class="side-bar-left">THE NOIR SYNDICATE</div>
+    <div class="side-bar-right">BOARD HUB v1.7</div>
 
-    <!-- CENTERKONSOL (TÄRNING + ALLA KNAPPAR) -->
+    <!-- CENTERKONSOL -->
     <div class="center-console">
         
         <div id="dice-container" onclick="rollDice()">1</div>
 
-        <!-- HUVUDFUNKTIONSPANEL -->
         <div class="control-panel">
             <div class="panel-label">Välj aktivt gäng för att hantera konto</div>
             <div class="gang-selector">
@@ -322,16 +321,16 @@
         </div>
 
         <div style="display:flex; gap:10px;">
-            <button onclick="openRulesModal()" style="background:#111; border:1px solid #222; font-size:11px; padding:5px 12px; color:#666;">📜 Visa Regler</button>
-            <button onclick="resetGame()" style="background:#111; border:1px solid #222; font-size:11px; padding:5px 12px; color:#666;">Nollställ Spel</button>
+            <button onclick="openRulesModal()" style="background:#111; border:1px solid #222; font-size:11px; padding:6px 15px; color:#888;">📜 Kompletta Regler</button>
+            <button onclick="resetGame()" style="background:#111; border:1px solid #222; font-size:11px; padding:6px 15px; color:#888;">Nollställ Spel</button>
         </div>
     </div>
 
-    <!-- SPELARE 3: KLÖVER (SVART) -->
+    <!-- SPELARE 3: KLÖVER -->
     <div class="player-corner" id="p3">
         <div class="gang-header">
             <div class="gang-title">♣ Iron Clovers</div>
-            <div class="deck-suit suit-black">SVART KORT</div>
+            <div class="deck-suit suit-black">Svart kulör</div>
         </div>
         <div class="stats-grid">
             <div class="stat-box"><div class="stat-label">Bank</div><div class="stat-value" id="p3-bank">$300</div></div>
@@ -340,11 +339,11 @@
         </div>
     </div>
 
-    <!-- SPELARE 4: RUTER (RÖD) -->
+    <!-- SPELARE 4: RUTER -->
     <div class="player-corner" id="p4">
         <div class="gang-header">
             <div class="gang-title">♦ Diamond Syndicate</div>
-            <div class="deck-suit suit-red">RÖTT KORT</div>
+            <div class="deck-suit suit-red">Röd kulör</div>
         </div>
         <div class="stats-grid">
             <div class="stat-box"><div class="stat-label">Bank</div><div class="stat-value" id="p4-bank">$300</div></div>
@@ -355,29 +354,62 @@
 
     <!-- POPUPS -->
     <div class="overlay" id="event-overlay"><div class="popup"><div class="popup-dice-badge" id="event-dice-badge"></div><div class="popup-title" id="event-title"></div><div class="popup-desc" id="event-desc"></div><button class="popup-btn" onclick="closePopup()">Uppfattat</button></div></div>
-    <div class="overlay" id="pay-overlay"><div class="popup" style="border-color: #e6b800;"><div class="popup-title" style="color:#e6b800;" id="pay-title">Skicka pengar</div><div class="pay-grid"><div><label for="pay-target">Mottagare</label><select id="pay-target"></select></div><div><label for="pay-amount">Belopp ($)</label><input type="number" id="pay-amount" value="10" min="1"></div></div><div style="display:flex; gap:10px;"><button onclick="executePayment()" class="btn-success" style="padding:10px; width:50%;">Bekräfta</button><button onclick="closePayModal()" style="background:#222; padding:10px; width:50%;">Avbryt</button></div></div></div>
+    <div class="overlay" id="pay-overlay"><div class="popup" style="border-color:#e6b800;"><div class="popup-title" style="color:#e6b800;" id="pay-title">Skicka pengar</div><div class="pay-grid"><div><label for="pay-target">Mottagare</label><select id="pay-target"></select></div><div><label for="pay-amount">Belopp ($)</label><input type="number" id="pay-amount" value="10" min="1"></div></div><div style="display:flex; gap:10px;"><button onclick="executePayment()" class="btn-success" style="padding:10px; width:50%;">Bekräfta</button><button onclick="closePayModal()" style="background:#222; padding:10px; width:50%;">Avbryt</button></div></div></div>
 
     <!-- REGLER POPUP -->
     <div class="overlay" id="rules-overlay">
         <div class="popup popup-large">
-            <h1 style="color:#3a86ff; text-align:center; font-size:24px; letter-spacing:1px; margin-bottom:5px;">THE NOIR SYNDICATE</h1>
-            <h2>🗺️ Spelplan & Kortlekens Färger</h2>
-            <p>Spelet använder en vanlig kortlek där färgerna styr ekonomin direkt:</p>
+            <h1 style="color:#3a86ff; text-align:center; font-size:26px; letter-spacing:2px; margin-bottom:5px;">THE NOIR SYNDICATE</h1>
+            <p style="text-align:center; color:#888; font-style:italic; margin-bottom:20px;">Officiellt Spelkoncept - Fyra fristående gäng (Alla mot alla)</p>
+            
+            <h2>🕵️‍♂️ Översikt & Handling</h2>
+            <p>Fyra rivaliserande syndikat kämpar om makten på gatorna. Din uppgift som gängledare är att smuggla kapital från din Boss (Kungarna) och säkra pengarna i ditt högkvarter (Essen) – allt medan polisen (Knektarna) patrullerar i skuggorna. Spelet spelas som en stenhård uppgörelse där alla kämpar mot alla.</p>
+            
+            <h2>🗺️ Spelplanens Layout (48 Kort)</h2>
+            <p>Kortleken blandas och placeras ut i ett dolt <strong>6x8-rutnät</strong> på bordet med följande fasta placeringar:</p>
             <ul>
-                <li><strong>Svart Allians:</strong> ♠ Nightspades & ♣ Iron Clovers kontrollerar de svarta korten på brädet.</li>
-                <li><strong>Röd Allians:</strong> ♥ Crimson Hearts & ♦ Diamond Syndicate kontrollerar de röda korten på brädet.</li>
-                <li>När du landar på ett motståndarkort betalar du kortets värde i fickpengar till ägaren av den färgen.</li>
+                <li><strong>Hörnen (Essen):</strong> Respektive gängs egna Huvudkvarter/Safe House.</li>
+                <li><strong>Diagonalt innanför (Kungarna):</strong> Bossen (håller ditt gängs unika kassavalv).</li>
+                <li><strong>Mitten (Knektarna):</strong> Polisen startar i mitten, men rör sig ut på spelplanen under spelets gång.</li>
+                <li><strong>Övriga kort (2-10 och Damer):</strong> Blandas och läggs dolda (upp och ner).</li>
             </ul>
-            <h2>🚨 Polisen (Knektarna)</h2>
+
+            <h2>🎨 Kortlekens Färger & Rivalitet (4 Lag)</h2>
+            <p>Spelet har fyra unika gäng baserade på kortlekens färger:</p>
             <ul>
-                <li>Knektarna flyttar in på spelplanen via händelser och <strong>ersätter kortet de ockuperar</strong>.</li>
-                <li>Att landa på sitt eget gängs Knekt fungerar som en helt säker <strong>frizon</strong> (gratis).</li>
-                <li>Landar du på en motståndares Knekt blir du av med alla fickpengar över $20 (de går till den knektens Boss) och du hamnar i deras häkte.</li>
-                <li><strong>Trängselregel:</strong> Två Knektar får aldrig stanna på samma ruta, men de får passera över varandra.</li>
+                <li><strong>♠ Nightspades</strong> (Svart kulör)</li>
+                <li><strong>♣ Iron Clovers</strong> (Svart kulör)</li>
+                <li><strong>♥ Crimson Hearts</strong> (Röd kulör)</li>
+                <li><strong>♦ Diamond Syndicate</strong> (Röd kulör)</li>
+                <li><strong>Betalningsregel:</strong> När du landar på ett uppvänt kort som matchar din <em>egen</em> gängfärg är det helt gratis. Landar du däremot på ett kort som tillhör något av de andra tre rivaliserande gängen (oavsett om det delar samma röda/svarta kulör eller inte), måste du omedelbart betala kortets värde (t.ex. en 5:a = $5) till den aktuella spelaren via appen.</li>
+                <li><strong>Damerna (Barerna):</strong> Alla gäng går in gratis på Damerna, men man tvingas <strong>stå över nästa omgång</strong>.</li>
             </ul>
-            <h2>💰 Ekonomi & Konkurs</h2>
-            <p>Du hämtar $100 från din Boss (Banken) och ska försöka smuggla dem till ditt Huvudkvarter (Ess). Har du inte råd att betala en avgift går du i personlig konkurs: du nollställs till $20 och flyttas tillbaka till ditt Ess.</p>
-            <button class="popup-btn" onclick="closeRulesModal()" style="background:#222; margin-top:15px;">Stäng Regler</button>
+
+            <h2>🎲 Rörelseregler</h2>
+            <ul>
+                <li>Man slår tärningen på iPaden och flyttar det exakta antalet steg (endast horisontellt och vertikalt, <strong>inga diagonala steg</strong>).</li>
+                <li>Du får inte gå tillbaka till samma ruta under samma drag.</li>
+                <li>När du landar på ett dolt kort vänds det upp permanent.</li>
+            </ul>
+
+            <h2>🚨 Polisen (Knektarna) & Fängelset</h2>
+            <p>När händelsekort aktiveras rör sig stadens poliser (Knektarna) ut i rutnätet:</p>
+            <ul>
+                <li><strong>Ockupation:</strong> När en Knekt flyttar in på planen placeras den fysiskt ovanpå det kort den landar på och <strong>ersätter kortets funktion helt</strong> så länge den står kvar.</li>
+                <li><strong>Frizon / Fälla:</strong> Att landa på sin <em>egen</em> gängknekt är helt säkert och fungerar som ett <strong>gratisställe</strong>. Om du däremot landar på (eller blir träffad av) en <em>motståndares</em> Knekt blir du omedelbart gripen!</li>
+                <li><strong>Trängselregeln:</strong> Två Knektar får <strong>aldrig stanna på samma ruta</strong>. Däremot har de tillåtelse att passera/gå över varandra under förflyttning.</li>
+                <li><strong>Straff vid gripande:</strong> Du blir av med alla smuggelpengar du bär på fickan (allt över startkapitalet $20) till den Knektens gängkassa, och din pjäs flyttas direkt till den motståndarens Boss-ruta (Fängelset). Slå 4+ för att bryta dig ut vid nästa tur.</li>
+            </ul>
+
+            <h2>💰 Ekonomi & Seger</h2>
+            <ul>
+                <li><strong>Startkapital:</strong> Varje spelare har $20 på fickan och $300 i sin Bank (hos sin Boss).</li>
+                <li><strong>Smuggling:</strong> När du besöker din Boss plockar du ut $100 till fickan. Ditt mål är att ta dig till ditt eget Ess och trycka på "Säkra Ess".</li>
+                <li><strong>Konkurs:</strong> Om dina fickpengar tar slut på grund av motståndaravgifter går du i personlig konkurs. Du nollställs omedelbart till $20 och flyttas direkt tillbaka till ditt eget Ess (Huvudkvarter).</li>
+                <li><strong>Vinst:</strong> Först till <strong>$200 säkrade i sitt Ess</strong> vinner spelet!</li>
+            </ul>
+
+            <button class="popup-btn" onclick="closeRulesModal()" style="margin-top:15px;">Tillbaka till spelet</button>
         </div>
     </div>
 
@@ -395,9 +427,11 @@
             { title: "💵 Mutor inom polisen", desc: "Du har köpt en konstabel. Du får flytta ut valfri motståndares polis (Knekt) till sin ursprungliga startplats i mitten." },
             { title: "📂 Insiderjobb", desc: "Kartorna ritas om. Du får byta plats på två valfria kort av din egen färg ute på spelplanen." },
             { title: "💥 Gatustrid", desc: "Skuggspel i gränderna! Du får byta plats med ett av dina egna kort och en motståndares kort (dock ej kort där det står en polis)." },
+            { title: "🎟️ Mutkort Säkrat", desc: "Du får ett digitalt mutkort på hand. Spara det! Du kan använda det när som helst för att landa helt gratis på en motståndares färg." },
             { title: "🔍 Razzia!", desc: "Polisens strålkastare tänds. Alla dolda kort som ligger direkt intill en valfri polis (Knekt) ska omedelbart vändas upp!" },
             { title: "📉 Ekonomisk Kris", desc: "Tuffa tider i stan. Under nästa varv kostar det dubbelt så mycket att landa på motståndarnas kvarter." },
-            { title: "🏃 Genväg i gränden", desc: "Du hittar en olåst dörr. Du får dispens att flytta diagonalt under just detta drag om du vill." }
+            { title: "🏃 Genväg i gränden", desc: "Du hittar en olåst dörr. Du får dispens att flytta diagonalt under just detta drag om du vill." },
+            { title: "🕵️ Ficktjuv", desc: "Ett snabbt möte i trängseln. Stjäl hälften av fickpengarna ($10) från valfri motståndare som står på samma hälft av spelplanen som du." }
         ];
 
         let selectedGangId = null;
