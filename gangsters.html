@@ -45,7 +45,7 @@
             background-color: var(--card-bg);
             border: 2px solid var(--border-color);
             border-radius: 16px;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -73,7 +73,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--gang-color);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .stats-grid {
@@ -107,9 +107,10 @@
         }
 
         .action-buttons {
-            display: flex;
-            gap: 8px;
-            margin-top: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-top: 10px;
         }
 
         button {
@@ -117,11 +118,10 @@
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 10px;
-            font-size: 14px;
+            padding: 8px;
+            font-size: 13px;
             font-weight: bold;
             cursor: pointer;
-            flex: 1;
             transition: background 0.2s, transform 0.05s;
         }
 
@@ -134,6 +134,8 @@
         .btn-success:active { background: #2d6a4f; }
         .btn-danger { background: #64111e; color: #ff4d6d; }
         .btn-danger:active { background: #800f2f; }
+        .btn-pay { background: #3d341d; color: #ffbe0b; grid-column: span 2; }
+        .btn-pay:active { background: #5c4d24; }
 
         /* Centerkonsol */
         .center-console {
@@ -178,11 +180,11 @@
 
         /* Information / Loggar i mitten på sidorna */
         .side-bar-left { grid-area: 2 / 1; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 14px; }
-        .side-bar-right { grid-area: 2 / 3; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 14px; id: version-tag; }
+        .side-bar-right { grid-area: 2 / 3; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 14px; }
         .top-bar { grid-area: 1 / 2; display: flex; align-items: center; justify-content: center; font-weight: bold; letter-spacing: 3px; color: #444; }
         .bottom-bar { grid-area: 3 / 2; display: flex; align-items: center; justify-content: center; }
 
-        /* Händelse-Popup */
+        /* Popups (Händelser & Transaktioner) */
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -205,34 +207,73 @@
             background: #151515;
             border: 2px solid #ff4d4d;
             border-radius: 16px;
-            padding: 40px;
+            padding: 35px;
             max-width: 500px;
             width: 90%;
             text-align: center;
             box-shadow: 0 20px 40px rgba(0,0,0,0.8);
         }
 
+        .popup-dice-badge {
+            background: #333;
+            color: #fff;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         .popup-title {
             color: #ff4d4d;
-            font-size: 28px;
+            font-size: 26px;
             text-transform: uppercase;
             margin-bottom: 15px;
             letter-spacing: 1px;
         }
 
         .popup-desc {
-            font-size: 18px;
+            font-size: 16px;
             line-height: 1.6;
             color: #ccc;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .popup-btn {
             background: #ff4d4d;
             color: black;
-            font-size: 18px;
+            font-size: 16px;
             padding: 12px 30px;
             border-radius: 8px;
+            width: 100%;
+        }
+
+        /* Transaktionsmeny specifikt */
+        .pay-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .pay-grid label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .pay-grid select, .pay-grid input {
+            width: 100%;
+            background: #222;
+            border: 1px solid #444;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -240,9 +281,8 @@
 
     <div class="top-bar">THE NOIR SYNDICATE</div>
     <div class="side-bar-left">« IPAD CONTROL ROOM »</div>
-    <div class="side-bar-right" id="version-display">Version 1.1 - GitHub Live</div>
+    <div class="side-bar-right" id="version-display">Version 1.2 - GitHub Live</div>
 
-    <!-- SPELARE 1: SPADER -->
     <div class="player-corner" id="p1">
         <div class="gang-title">♠ Nightspades</div>
         <div class="stats-grid">
@@ -251,13 +291,13 @@
             <div class="stat-box"><div class="stat-label">Säkrat</div><div class="stat-value" id="p1-secured" style="color:var(--spades-color)">$0</div></div>
         </div>
         <div class="action-buttons">
-            <button onclick="takeLoad(1)" class="btn-success">Hämta $100</button>
-            <button onclick="secureCash(1)">Säkra i Ess</button>
+            <button onclick="takeLoad(1)" class="btn-success">Hämta 100</button>
+            <button onclick="secureCash(1)">Säkra Ess</button>
             <button onclick="arrestPlayer(1)" class="btn-danger">Häktad</button>
+            <button onclick="openPayModal(1)" class="btn-pay">Skicka pengar ➔</button>
         </div>
     </div>
 
-    <!-- SPELARE 2: HJÄRTER -->
     <div class="player-corner" id="p2">
         <div class="gang-title">♥ Crimson Hearts</div>
         <div class="stats-grid">
@@ -266,19 +306,18 @@
             <div class="stat-box"><div class="stat-label">Säkrat</div><div class="stat-value" id="p2-secured" style="color:var(--hearts-color)">$0</div></div>
         </div>
         <div class="action-buttons">
-            <button onclick="takeLoad(2)" class="btn-success">Hämta $100</button>
-            <button onclick="secureCash(2)">Säkra i Ess</button>
+            <button onclick="takeLoad(2)" class="btn-success">Hämta 100</button>
+            <button onclick="secureCash(2)">Säkra Ess</button>
             <button onclick="arrestPlayer(2)" class="btn-danger">Häktad</button>
+            <button onclick="openPayModal(2)" class="btn-pay">Skicka pengar ➔</button>
         </div>
     </div>
 
-    <!-- CENTERKONSOL (TÄRNING) -->
     <div class="center-console">
         <div id="dice-container" onclick="rollDice()">1</div>
         <div class="center-instruction">Tryck för att slå</div>
     </div>
 
-    <!-- SPELARE 3: KLÖVER -->
     <div class="player-corner" id="p3">
         <div class="gang-title">♣ Iron Clovers</div>
         <div class="stats-grid">
@@ -287,13 +326,13 @@
             <div class="stat-box"><div class="stat-label">Säkrat</div><div class="stat-value" id="p3-secured" style="color:var(--clovers-color)">$0</div></div>
         </div>
         <div class="action-buttons">
-            <button onclick="takeLoad(3)" class="btn-success">Hämta $100</button>
-            <button onclick="secureCash(3)">Säkra i Ess</button>
+            <button onclick="takeLoad(3)" class="btn-success">Hämta 100</button>
+            <button onclick="secureCash(3)">Säkra Ess</button>
             <button onclick="arrestPlayer(3)" class="btn-danger">Häktad</button>
+            <button onclick="openPayModal(3)" class="btn-pay">Skicka pengar ➔</button>
         </div>
     </div>
 
-    <!-- SPELARE 4: RUTER -->
     <div class="player-corner" id="p4">
         <div class="gang-title">♦ Diamond Syndicate</div>
         <div class="stats-grid">
@@ -302,9 +341,10 @@
             <div class="stat-box"><div class="stat-label">Säkrat</div><div class="stat-value" id="p4-secured" style="color:var(--diamonds-color)">$0</div></div>
         </div>
         <div class="action-buttons">
-            <button onclick="takeLoad(4)" class="btn-success">Hämta $100</button>
-            <button onclick="secureCash(4)">Säkra i Ess</button>
+            <button onclick="takeLoad(4)" class="btn-success">Hämta 100</button>
+            <button onclick="secureCash(4)">Säkra Ess</button>
             <button onclick="arrestPlayer(4)" class="btn-danger">Häktad</button>
+            <button onclick="openPayModal(4)" class="btn-pay">Skicka pengar ➔</button>
         </div>
     </div>
 
@@ -312,25 +352,44 @@
         <button onclick="resetGame()" style="background:#111; border:1px solid #222; font-size:11px; padding:5px 10px;">Nollställ Spel</button>
     </div>
 
-    <!-- HÄNDELSE POPUP -->
     <div class="overlay" id="event-overlay">
         <div class="popup">
+            <div class="popup-dice-badge" id="event-dice-badge">Du slog X</div>
             <div class="popup-title" id="event-title">HÄNDELSE</div>
             <div class="popup-desc" id="event-desc">Något har hänt på stadens gator...</div>
             <button class="popup-btn" onclick="closePopup()">Uppfattat</button>
         </div>
     </div>
 
+    <div class="overlay" id="pay-overlay">
+        <div class="popup" style="border-color: #ffbe0b;">
+            <div class="popup-title" style="color: #ffbe0b;" id="pay-title">Skicka pengar</div>
+            <div class="pay-grid">
+                <div>
+                    <label for="pay-target">Mottagare</label>
+                    <select id="pay-target">
+                        </select>
+                </div>
+                <div>
+                    <label for="pay-amount">Belopp ($)</label>
+                    <input type="number" id="pay-amount" value="10" min="1">
+                </div>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button onclick="executePayment()" class="btn-success" style="padding:12px; font-size:16px;">Bekräfta</button>
+                <button onclick="closePayModal()" style="background:#333; padding:12px; font-size:16px;">Avbryt</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Spelardata inställningar
         let players = {
-            1: { bank: 300, pocket: 20, secured: 0 },
-            2: { bank: 300, pocket: 20, secured: 0 },
-            3: { bank: 300, pocket: 20, secured: 0 },
-            4: { bank: 300, pocket: 20, secured: 0 }
+            1: { name: "Nightspades (♠)", bank: 300, pocket: 20, secured: 0 },
+            2: { name: "Crimson Hearts (♥)", bank: 300, pocket: 20, secured: 0 },
+            3: { name: "Iron Clovers (♣)", bank: 300, pocket: 20, secured: 0 },
+            4: { name: "Diamond Syndicate (♦)", bank: 300, pocket: 20, secured: 0 }
         };
 
-        // De 10 originalhändelserna
         const noirEvents = [
             { title: "🚨 Patrullering", desc: "Du får flytta din egen polis (Knekt) 1 steg. Hamnar den på en motståndare åker denne direkt till din Boss (i häktet)!" },
             { title: "🚨 Utryckning", desc: "Brådskande larm! Du får flytta din egen polis (Knekt) 2 steg på utsidan av brädet." },
@@ -344,10 +403,9 @@
             { title: "🕵️ Ficktjuv", desc: "Ett snabbt möte i trängseln. Stjäl hälften av fickpengarna ($10) från valfri motståndare som står på samma hälft av spelplanen som du." }
         ];
 
-        // Flagga för att förhindra spam-klick under rullning
         let isRolling = false;
+        let activePayerId = null;
 
-        // Uppdatera skärmarna
         function updateUI() {
             for (let id in players) {
                 document.getElementById(`p${id}-bank`).innerText = `$${players[id].bank}`;
@@ -356,7 +414,6 @@
             }
         }
 
-        // Action: Hämta $100 hos Kungen (Bossen)
         function takeLoad(id) {
             if (players[id].bank >= 100) {
                 players[id].bank -= 100;
@@ -367,7 +424,6 @@
             }
         }
 
-        // Action: Säkra pengar i Esset (Högkvarteret)
         function secureCash(id) {
             if (players[id].pocket > 20) {
                 let toSecure = players[id].pocket - 20;
@@ -376,28 +432,79 @@
                 updateUI();
                 
                 if (players[id].secured >= 200) {
-                    setTimeout(() => { alert(`KNEPTIN! Spelare ${id} har säkrat $200 och tagit över staden!`); }, 100);
+                    setTimeout(() => { alert(`KNEPTIN! ${players[id].name} har säkrat $200 och kontrollerar staden!`); }, 100);
                 }
             } else {
                 alert("Du har inga smuggelpengar utöver dina basfickpengar ($20) att säkra!");
             }
         }
 
-        // Action: Åka fast
         function arrestPlayer(id) {
             players[id].pocket = 20; 
             updateUI();
             alert(`Spelaren åkte dit! Alla smuggelpengar över $20 är borta. Slå 4+ för att lämna häktet vid nästa tur.`);
         }
 
-        // TÄRNINGSFUNKTION (Helt omskriven och stabiliserad för iOS/Safari)
+        // Öppna transaktionsfönster
+        function openPayModal(payerId) {
+            activePayerId = payerId;
+            document.getElementById("pay-title").innerText = `${players[payerId].name} betalar`;
+            
+            const select = document.getElementById("pay-target");
+            select.innerHTML = ""; // Rensa gamla alternativ
+            
+            // Fyll på med de andra tre spelarna
+            for (let id in players) {
+                if (id != payerId) {
+                    let opt = document.createElement("option");
+                    opt.value = id;
+                    opt.innerText = players[id].name;
+                    select.appendChild(opt);
+                }
+            }
+            
+            document.getElementById("pay-overlay").classList.add("active");
+        }
+
+        function closePayModal() {
+            document.getElementById("pay-overlay").classList.remove("active");
+            activePayerId = null;
+        }
+
+        // Genomför överföringen av pengar
+        function executePayment() {
+            const targetId = document.getElementById("pay-target").value;
+            const amount = parseInt(document.getElementById("pay-amount").value);
+            
+            if (isNaN(amount) || amount <= 0) {
+                alert("Ange ett giltigt belopp.");
+                return;
+            }
+            
+            // Kontrollera om betalaren har råd från fickan
+            if (players[activePayerId].pocket < amount) {
+                alert("Inte tillräckligt med pengar på fickan! Du skickas tillbaka till ditt Högkvarter.");
+                players[activePayerId].pocket = 20; // Konkursregel: tillbaka till start med $20
+                closePayModal();
+                updateUI();
+                return;
+            }
+            
+            // Flytta pengarna
+            players[activePayerId].pocket -= amount;
+            players[targetId].pocket += amount;
+            
+            updateUI();
+            closePayModal();
+        }
+
+        // Tärningsfunktion
         function rollDice() {
             if (isRolling) return;
             isRolling = true;
 
             const dice = document.getElementById("dice-container");
             
-            // Kör en enkel sifferväxling direkt i JS för att simulera rullning
             let counter = 0;
             const interval = setInterval(() => {
                 dice.innerText = Math.floor(Math.random() * 6) + 1;
@@ -406,22 +513,22 @@
                 if (counter > 6) {
                     clearInterval(interval);
                     
-                    // Slutgiltigt resultat
                     const finalResult = Math.floor(Math.random() * 6) + 1;
                     dice.innerText = finalResult;
                     isRolling = false;
 
-                    // 35% chans att trigga en händelse
+                    // 35% chans för händelse
                     if (Math.random() < 0.35) {
-                        triggerEvent();
+                        triggerEvent(finalResult);
                     }
                 }
             }, 70);
         }
 
-        // Slumpa händelse
-        function triggerEvent() {
+        // Slumpa händelse (tar nu emot tärningsresultatet som argument)
+        function triggerEvent(diceRoll) {
             const randomEvent = noirEvents[Math.floor(Math.random() * noirEvents.length)];
+            document.getElementById("event-dice-badge").innerText = `Du slog en ${diceRoll}:a`;
             document.getElementById("event-title").innerText = randomEvent.title;
             document.getElementById("event-desc").innerText = randomEvent.desc;
             document.getElementById("event-overlay").classList.add("active");
@@ -434,16 +541,15 @@
         function resetGame() {
             if (confirm("Vill du nollställa spelet?")) {
                 players = {
-                    1: { bank: 300, pocket: 20, secured: 0 },
-                    2: { bank: 300, pocket: 20, secured: 0 },
-                    3: { bank: 300, pocket: 20, secured: 0 },
-                    4: { bank: 300, pocket: 20, secured: 0 }
+                    1: { name: "Nightspades (♠)", bank: 300, pocket: 20, secured: 0 },
+                    2: { name: "Crimson Hearts (♥)", bank: 300, pocket: 20, secured: 0 },
+                    3: { name: "Iron Clovers (♣)", bank: 300, pocket: 20, secured: 0 },
+                    4: { name: "Diamond Syndicate (♦)", bank: 300, pocket: 20, secured: 0 }
                 };
                 updateUI();
             }
         }
 
-        // Initiera vid start
         updateUI();
     </script>
 </body>
