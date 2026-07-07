@@ -293,8 +293,9 @@
 
     <div class="top-bar">THE NOIR SYNDICATE</div>
     <div class="side-bar-left">« IPAD CONTROL ROOM »</div>
-    <div class="side-bar-right" id="version-display">Version 1.3 - GitHub Live</div>
+    <div class="side-bar-right" id="version-display">Version 1.4 - GitHub Live</div>
 
+    <!-- SPELARE 1: SPADER -->
     <div class="player-corner" id="p1">
         <div class="gang-title">♠ Nightspades</div>
         <div class="stats-grid">
@@ -310,6 +311,7 @@
         </div>
     </div>
 
+    <!-- SPELARE 2: HJÄRTER -->
     <div class="player-corner" id="p2">
         <div class="gang-title">♥ Crimson Hearts</div>
         <div class="stats-grid">
@@ -325,11 +327,13 @@
         </div>
     </div>
 
+    <!-- CENTERKONSOL (TÄRNING) -->
     <div class="center-console">
         <div id="dice-container" onclick="rollDice()">1</div>
         <div class="center-instruction">Tryck för att slå</div>
     </div>
 
+    <!-- SPELARE 3: KLÖVER -->
     <div class="player-corner" id="p3">
         <div class="gang-title">♣ Iron Clovers</div>
         <div class="stats-grid">
@@ -345,6 +349,7 @@
         </div>
     </div>
 
+    <!-- SPELARE 4: RUTER -->
     <div class="player-corner" id="p4">
         <div class="gang-title">♦ Diamond Syndicate</div>
         <div class="stats-grid">
@@ -365,6 +370,7 @@
         <button onclick="resetGame()" style="background:#111; border:1px solid #222; font-size:11px; padding:5px 10px;">Nollställ Spel</button>
     </div>
 
+    <!-- HÄNDELSE POPUP -->
     <div class="overlay" id="event-overlay">
         <div class="popup">
             <div class="popup-dice-badge" id="event-dice-badge">Du slog X</div>
@@ -374,6 +380,7 @@
         </div>
     </div>
 
+    <!-- TRANSAKTIONS POPUP -->
     <div class="overlay" id="pay-overlay">
         <div class="popup" style="border-color: #ffbe0b;">
             <div class="popup-title" style="color: #ffbe0b;" id="pay-title">Skicka pengar</div>
@@ -394,6 +401,7 @@
         </div>
     </div>
 
+    <!-- REGLER & PRESENTATION POPUP -->
     <div class="overlay" id="rules-overlay">
         <div class="popup popup-large">
             <h1 style="color:#3a86ff; text-align:center; font-size:28px; letter-spacing:2px; margin-bottom:5px;">THE NOIR SYNDICATE</h1>
@@ -407,16 +415,8 @@
             <ul>
                 <li><strong>Hörnen (Essen):</strong> Varje spelares Huvudkvarter/Safe House.</li>
                 <li><strong>Diagonalt innanför (Kungarna):</strong> Bossen (håller din gängkassa).</li>
-                <li><strong>Mitten (Knektarna):</strong> Polisen patrullerar utanför brädet längs linjerna.</li>
+                <li><strong>Mitten (Knektarna):</strong> Polisen startar i mitten, men rör sig ut på brädet under spelets gång.</li>
                 <li><strong>Övriga kort (2-10 och Damer):</strong> Blandas och läggs dolda (upp och ner).</li>
-            </ul>
-
-            <h2>🎭 Syndikaten (De fyra gängen)</h2>
-            <ul>
-                <li><strong>♠ Nightspades (Blå):</strong> Härskarna i hamnen.</li>
-                <li><strong>♥ Crimson Hearts (Rosa):</strong> Styr nöjeslivet och klubbarna.</li>
-                <li><strong>♣ Iron Clovers (Grön):</strong> Kontrollerar tung industri och fackförbund.</li>
-                <li><strong>♦ Diamond Syndicate (Gul):</strong> Eleganta finanshajar och penningtvätt.</li>
             </ul>
 
             <h2>🎲 Rörelseregler</h2>
@@ -427,15 +427,13 @@
                 <li><strong>Damerna (Barerna):</strong> Alla kommer in gratis, men man dricker för mycket och tvingas <strong>stå över nästa omgång</strong>.</li>
             </ul>
 
-            <h2>⚔️ Konflikter (Gatustrid)</h2>
-            <p>Om du landar på samma ruta som en motståndare utbryter konflikt! Spelarna slår varsitt slag på iPaden. Vinnaren får bestämma var förloraren ska skickas (t.ex. tillbaka till Högkvarteret om de inte nått sin boss ännu, eller bort från sitt mål).</p>
-
             <h2>🚨 Polisen (Knektarna) & Fängelset</h2>
-            <p>Om du landar på en fientlig Knekt (eller om den flyttas till dig via en händelse) blir du haffad!</p>
+            <p>När händelsekort aktiveras börjar stans Knektar (poliser) röra sig in på det dolda rutnätet. Följande regler gäller för dem:</p>
             <ul>
-                <li>Du blir av med alla smuggelpengar du bär på fickan (allt över startkapitalet $20). Pengarna tillfaller den Knektens Boss.</li>
-                <li>Din pjäs flyttas direkt till den motståndarens Boss-ruta (Fängelset).</li>
-                <li>För att bryta dig ut måste du slå <strong>4 eller högre</strong> på tärningen. Du startar då om i ditt eget huvudkvarter med $20 på fickan.</li>
+                <li><strong>Ockupation:</strong> När en Knekt flyttar in på spelplanen placeras den fysiskt ovanpå det kort den landar på och <strong>ersätter kortets funktion helt</strong> så länge den står kvar.</li>
+                <li><strong>Frizon / Fälla:</strong> Att landa på sin <em>egen</em> gängknekt är helt säkert och fungerar som ett <strong>gratisställe</strong>. Om du däremot landar på (eller blir träffad av) en <em>motståndares</em> Knekt blir du omedelbart gripen!</li>
+                <li><strong>Trängselregeln:</strong> Två Knektar får <strong>aldrig stanna på samma ruta</strong>. Däremot har de tillåtelse att passera/gå över varandra under förflyttning.</li>
+                <li><strong>Straff vid gripande:</strong> Du blir av med alla smuggelpengar du bär på fickan (allt över startkapitalet $20) till den Knektens Boss, och din pjäs flyttas direkt till den motståndarens Boss-ruta (Fängelset). Slå 4+ för att bryta dig ut vid nästa tur.</li>
             </ul>
 
             <h2>💰 Ekonomi & Seger</h2>
@@ -459,8 +457,8 @@
         };
 
         const noirEvents = [
-            { title: "🚨 Patrullering", desc: "Du får flytta din egen polis (Knekt) 1 steg. Hamnar den på en motståndare åker denne direkt till din Boss (i häktet)!" },
-            { title: "🚨 Utryckning", desc: "Brådskande larm! Du får flytta din egen polis (Knekt) 2 steg på utsidan av brädet." },
+            { title: "🚨 Patrullering", desc: "Du får flytta din egen polis (Knekt) 1 steg på brädet. Hamnar den på en motståndare åker denne direkt till din Boss (i häktet)!" },
+            { title: "🚨 Utryckning", desc: "Brådskande larm! Du får flytta din egen polis (Knekt) 2 steg in på spelplanen." },
             { title: "💵 Mutor inom polisen", desc: "Du har köpt en konstabel. Du får flytta ut valfri motståndares polis (Knekt) till sin ursprungliga startplats i mitten." },
             { title: "📂 Insiderjobb", desc: "Kartorna ritas om. Du får byta plats på två valfria kort av din egen färg ute på spelplanen." },
             { title: "💥 Gatustrid", desc: "Skuggspel i gränderna! Du får byta plats med ett av dina egna kort och en motståndares kort (dock ej kort där det står en polis)." },
@@ -596,7 +594,6 @@
             document.getElementById("event-overlay").classList.remove("active");
         }
 
-        /* Regelfunktioner */
         function openRulesModal() {
             document.getElementById("rules-overlay").classList.add("active");
         }
