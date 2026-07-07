@@ -14,8 +14,8 @@
             
             /* Fyra unika gängfärger */
             --spades-color: #3a86ff;   
-            --clovers-color: #38b000;  
             --hearts-color: #ff006e;   
+            --clovers-color: #38b000;  
             --diamonds-color: #ffbe0b; 
         }
 
@@ -34,8 +34,8 @@
             height: 100vh;
             overflow: hidden;
             display: grid;
-            grid-template-rows: 140px 1fr 140px;
-            grid-template-columns: 280px 1fr 280px;
+            grid-template-rows: 240px 1fr 240px;
+            grid-template-columns: 320px 1fr 320px;
             padding: 15px;
             gap: 15px;
         }
@@ -74,7 +74,7 @@
         }
 
         .gang-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -82,13 +82,12 @@
         }
 
         .deck-suit {
-            font-size: 10px;
+            font-size: 9px;
             background: #1c1c1c;
             padding: 2px 6px;
             border-radius: 4px;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
         .suit-black { color: #888; border: 1px solid #333; }
         .suit-red { color: #ff4d4d; border: 1px solid #4a1111; }
@@ -97,28 +96,55 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 6px;
-            margin-top: 8px;
+            margin: 8px 0;
         }
 
         .stat-box {
             background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.04);
             border-radius: 6px;
-            padding: 6px 4px;
+            padding: 6px 2px;
             text-align: center;
         }
 
         .stat-label {
-            font-size: 10px;
+            font-size: 9px;
             color: var(--text-muted);
             text-transform: uppercase;
             margin-bottom: 2px;
         }
 
         .stat-value {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
         }
+
+        /* Dedikerade knappar per hörn */
+        .gang-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        button {
+            background: #222;
+            color: white;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 8px 4px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+        button:active { background: #333; }
+
+        .btn-success { background: #133324; color: #40a070; border-color: #1a4430; }
+        .btn-success:active { background: #1a4430; }
+        .btn-danger { background: #4a0e17; color: #e65c65; border-color: #61131f; }
+        .btn-danger:active { background: #61131f; }
+        .btn-pay { background: #2d2510; color: #e6b800; border-color: #3d3216; grid-column: span 2; }
+        .btn-pay:active { background: #3d3216; }
 
         /* Centerkonsol */
         .center-console {
@@ -131,101 +157,28 @@
             border-left: 1px solid rgba(255,255,255,0.03);
             border-right: 1px solid rgba(255,255,255,0.03);
             padding: 20px;
-            gap: 20px;
+            gap: 25px;
         }
 
         #dice-container {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
             background: #ffffff;
             color: #000000;
-            border-radius: 16px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 42px;
+            font-size: 48px;
             font-weight: bold;
-            box-shadow: 0 0 25px rgba(255,255,255,0.1);
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
             cursor: pointer;
             transition: transform 0.1s;
         }
+        #dice-container:active { transform: scale(0.95); }
 
-        #dice-container:active { transform: scale(0.9); }
-
-        .control-panel {
-            width: 100%;
-            max-width: 440px;
-            background: #111;
-            border: 1px solid #222;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.8);
-        }
-
-        .panel-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            text-align: center;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        .gang-selector {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .selector-btn {
-            background: #1c1c1c;
-            border: 1px solid #333;
-            padding: 10px 5px;
-            font-size: 12px;
-            border-radius: 6px;
-            color: #aaa;
-            cursor: pointer;
-        }
-        .selector-btn.active[data-gang="1"] { background: var(--spades-color); color: black; font-weight:bold; border-color: #fff; }
-        .selector-btn.active[data-gang="2"] { background: var(--hearts-color); color: white; font-weight:bold; border-color: #fff; }
-        .selector-btn.active[data-gang="3"] { background: var(--clovers-color); color: black; font-weight:bold; border-color: #fff; }
-        .selector-btn.active[data-gang="4"] { background: var(--diamonds-color); color: black; font-weight:bold; border-color: #fff; }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            opacity: 0.2;
-            pointer-events: none;
-            transition: opacity 0.2s;
-        }
-        .action-grid.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        button {
-            background: #252525;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 10px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        button:active { background: #333; }
-
-        .btn-success { background: #133324; color: #40a070; }
-        .btn-success:active { background: #1a4430; }
-        .btn-danger { background: #4a0e17; color: #e65c65; }
-        .btn-danger:active { background: #61131f; }
-        .btn-pay { background: #2d2510; color: #e6b800; grid-column: span 2; }
-        .btn-pay:active { background: #3d3216; }
-
-        .side-bar-left { grid-area: 2 / 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #333; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
-        .side-bar-right { grid-area: 2 / 3; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #333; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+        .side-bar-left { grid-area: 2 / 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #222; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: bold; }
+        .side-bar-right { grid-area: 2 / 3; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #222; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: bold; }
 
         /* Overlays & Popups */
         .overlay {
@@ -260,11 +213,14 @@
         .popup-dice-badge { background: #222; color: #fff; display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
         .popup-title { color: #ff4d4d; font-size: 22px; text-transform: uppercase; margin-bottom: 10px; }
         .popup-desc { font-size: 14px; line-height: 1.5; color: #ccc; margin-bottom: 20px; }
-        .popup-btn { background: #3a86ff; color: white; font-size: 14px; padding: 12px; border-radius: 6px; width: 100%; font-weight: bold; }
+        .popup-btn { background: #3a86ff; color: white; font-size: 14px; padding: 12px; border-radius: 6px; width: 100%; font-weight: bold; border: none; }
 
         .pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; text-align: left; }
         .pay-grid label { display: block; font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
         .pay-grid select, .pay-grid input { width: 100%; background: #1c1c1c; border: 1px solid #333; color: white; padding: 8px; border-radius: 6px; font-size: 14px; }
+        
+        .police-selector-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 15px; }
+        .police-btn { text-align: left; padding: 12px; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -273,12 +229,18 @@
     <div class="player-corner" id="p1">
         <div class="gang-header">
             <div class="gang-title">♠ Nightspades</div>
-            <div class="deck-suit suit-black">Svart kulör</div>
+            <div class="deck-suit suit-black">Svart svit</div>
         </div>
         <div class="stats-grid">
             <div class="stat-box"><div class="stat-label">Bank</div><div class="stat-value" id="p1-bank">$300</div></div>
             <div class="stat-box"><div class="stat-label">Fickan</div><div class="stat-value" id="p1-pocket">$20</div></div>
             <div class="stat-box"><div class="stat-label">Säkrat</div><div class="stat-value" id="p1-secured" style="color:var(--spades-color)">$0</div></div>
+        </div>
+        <div class="gang-actions">
+            <button onclick="takeLoad(1)" class="btn-success">Hämta $100</button>
+            <button onclick="secureCash(1)">Säkra Ess</button>
+            <button onclick="arrestPlayer(1)" class="btn-danger">Häktad (Polis)</button>
+            <button onclick="openPayModal(1)" class="btn-pay">Skicka pengar ➔</button>
         </div>
     </div>
 
@@ -286,43 +248,30 @@
     <div class="player-corner" id="p2">
         <div class="gang-header">
             <div class="gang-title">♥ Crimson Hearts</div>
-            <div class="deck-suit suit-red">Röd kulör</div>
+            <div class="deck-suit suit-red">Röd svit</div>
         </div>
         <div class="stats-grid">
             <div class="stat-box"><div class="stat-label">Bank</div><div class="stat-value" id="p2-bank">$300</div></div>
             <div class="stat-box"><div class="stat-label">Fickan</div><div class="stat-value" id="p2-pocket">$20</div></div>
             <div class="stat-box"><div class="stat-label">Säkrat</div><div class="stat-value" id="p2-secured" style="color:var(--hearts-color)">$0</div></div>
         </div>
+        <div class="gang-actions">
+            <button onclick="takeLoad(2)" class="btn-success">Hämta $100</button>
+            <button onclick="secureCash(2)">Säkra Ess</button>
+            <button onclick="arrestPlayer(2)" class="btn-danger">Häktad (Polis)</button>
+            <button onclick="openPayModal(2)" class="btn-pay">Skicka pengar ➔</button>
+        </div>
     </div>
 
     <div class="side-bar-left">THE NOIR SYNDICATE</div>
-    <div class="side-bar-right">BOARD HUB v1.7</div>
+    <div class="side-bar-right">BOARD HUB v1.8</div>
 
     <!-- CENTERKONSOL -->
     <div class="center-console">
-        
         <div id="dice-container" onclick="rollDice()">1</div>
-
-        <div class="control-panel">
-            <div class="panel-label">Välj aktivt gäng för att hantera konto</div>
-            <div class="gang-selector">
-                <button class="selector-btn" data-gang="1" onclick="selectGang(1)">♠ Spader</button>
-                <button class="selector-btn" data-gang="2" onclick="selectGang(2)">♥ Hjärter</button>
-                <button class="selector-btn" data-gang="3" onclick="selectGang(3)">♣ Klöver</button>
-                <button class="selector-btn" data-gang="4" onclick="selectGang(4)">♦ Ruter</button>
-            </div>
-
-            <div class="action-grid" id="action-panel">
-                <button onclick="takeLoadFromPanel()" class="btn-success">Hämta $100</button>
-                <button onclick="secureCashFromPanel()">Säkra Ess</button>
-                <button onclick="arrestPlayerFromPanel()" class="btn-danger">Häktad (Polis)</button>
-                <button onclick="openPayModalFromPanel()" class="btn-pay">Skicka pengar till motståndare ➔</button>
-            </div>
-        </div>
-
-        <div style="display:flex; gap:10px;">
-            <button onclick="openRulesModal()" style="background:#111; border:1px solid #222; font-size:11px; padding:6px 15px; color:#888;">📜 Kompletta Regler</button>
-            <button onclick="resetGame()" style="background:#111; border:1px solid #222; font-size:11px; padding:6px 15px; color:#888;">Nollställ Spel</button>
+        <div style="display:flex; flex-direction:column; gap:10px; width: 100%; max-width: 180px;">
+            <button onclick="openRulesModal()" style="background:#111; border:1px solid #222; font-size:12px; padding:8px 0; color:#aaa;">📜 Kompletta Regler</button>
+            <button onclick="resetGame()" style="background:#111; border:1px solid #222; font-size:12px; padding:8px 0; color:#666;">Nollställ Spel</button>
         </div>
     </div>
 
@@ -330,12 +279,18 @@
     <div class="player-corner" id="p3">
         <div class="gang-header">
             <div class="gang-title">♣ Iron Clovers</div>
-            <div class="deck-suit suit-black">Svart kulör</div>
+            <div class="deck-suit suit-black">Svart svit</div>
         </div>
         <div class="stats-grid">
             <div class="stat-box"><div class="stat-label">Bank</div><div class="stat-value" id="p3-bank">$300</div></div>
             <div class="stat-box"><div class="stat-label">Fickan</div><div class="stat-value" id="p3-pocket">$20</div></div>
             <div class="stat-box"><div class="stat-label">Säkrat</div><div class="stat-value" id="p3-secured" style="color:var(--clovers-color)">$0</div></div>
+        </div>
+        <div class="gang-actions">
+            <button onclick="takeLoad(3)" class="btn-success">Hämta $100</button>
+            <button onclick="secureCash(3)">Säkra Ess</button>
+            <button onclick="arrestPlayer(3)" class="btn-danger">Häktad (Polis)</button>
+            <button onclick="openPayModal(3)" class="btn-pay">Skicka pengar ➔</button>
         </div>
     </div>
 
@@ -343,18 +298,29 @@
     <div class="player-corner" id="p4">
         <div class="gang-header">
             <div class="gang-title">♦ Diamond Syndicate</div>
-            <div class="deck-suit suit-red">Röd kulör</div>
+            <div class="deck-suit suit-red">Röd svit</div>
         </div>
         <div class="stats-grid">
             <div class="stat-box"><div class="stat-label">Bank</div><div class="stat-value" id="p4-bank">$300</div></div>
             <div class="stat-box"><div class="stat-label">Fickan</div><div class="stat-value" id="p4-pocket">$20</div></div>
             <div class="stat-box"><div class="stat-label">Säkrat</div><div class="stat-value" id="p4-secured" style="color:var(--diamonds-color)">$0</div></div>
         </div>
+        <div class="gang-actions">
+            <button onclick="takeLoad(4)" class="btn-success">Hämta $100</button>
+            <button onclick="secureCash(4)">Säkra Ess</button>
+            <button onclick="arrestPlayer(4)" class="btn-danger">Häktad (Polis)</button>
+            <button onclick="openPayModal(4)" class="btn-pay">Skicka pengar ➔</button>
+        </div>
     </div>
 
-    <!-- POPUPS -->
+    <!-- POPUPS & OVERLAYS -->
     <div class="overlay" id="event-overlay"><div class="popup"><div class="popup-dice-badge" id="event-dice-badge"></div><div class="popup-title" id="event-title"></div><div class="popup-desc" id="event-desc"></div><button class="popup-btn" onclick="closePopup()">Uppfattat</button></div></div>
+    
+    <!-- BETALA MODAL -->
     <div class="overlay" id="pay-overlay"><div class="popup" style="border-color:#e6b800;"><div class="popup-title" style="color:#e6b800;" id="pay-title">Skicka pengar</div><div class="pay-grid"><div><label for="pay-target">Mottagare</label><select id="pay-target"></select></div><div><label for="pay-amount">Belopp ($)</label><input type="number" id="pay-amount" value="10" min="1"></div></div><div style="display:flex; gap:10px;"><button onclick="executePayment()" class="btn-success" style="padding:10px; width:50%;">Bekräfta</button><button onclick="closePayModal()" style="background:#222; padding:10px; width:50%;">Avbryt</button></div></div></div>
+
+    <!-- POLIS GRIPANDE MODAL -->
+    <div class="overlay" id="police-overlay"><div class="popup" style="border-color:#e65c65;"><div class="popup-title" style="color:#e65c65;">Vem gjorde gripandet?</div><p style="font-size:13px; color:#aaa; margin-bottom:10px;">Smuggelpengarna på fickan tillfaller den polisens gängbank.</p><div class="police-selector-grid" id="police-targets"></div><button onclick="closePoliceModal()" style="background:#222; padding:10px; width:100%; margin-top:10px;">Avbryt</button></div></div>
 
     <!-- REGLER POPUP -->
     <div class="overlay" id="rules-overlay">
@@ -374,14 +340,14 @@
                 <li><strong>Övriga kort (2-10 och Damer):</strong> Blandas och läggs dolda (upp och ner).</li>
             </ul>
 
-            <h2>🎨 Kortlekens Färger & Rivalitet (4 Lag)</h2>
-            <p>Spelet har fyra unika gäng baserade på kortlekens färger:</p>
+            <h2>🎨 Kortlekens Sviter & Rivalitet (4 Lag)</h2>
+            <p>Spelet har fyra unika gäng baserade på kortlekens sviter:</p>
             <ul>
-                <li><strong>♠ Nightspades</strong> (Svart kulör)</li>
-                <li><strong>♣ Iron Clovers</strong> (Svart kulör)</li>
-                <li><strong>♥ Crimson Hearts</strong> (Röd kulör)</li>
-                <li><strong>♦ Diamond Syndicate</strong> (Röd kulör)</li>
-                <li><strong>Betalningsregel:</strong> När du landar på ett uppvänt kort som matchar din <em>egen</em> gängfärg är det helt gratis. Landar du däremot på ett kort som tillhör något av de andra tre rivaliserande gängen (oavsett om det delar samma röda/svarta kulör eller inte), måste du omedelbart betala kortets värde (t.ex. en 5:a = $5) till den aktuella spelaren via appen.</li>
+                <li><strong>♠ Nightspades</strong> (Svart färg/svit)</li>
+                <li><strong>♣ Iron Clovers</strong> (Svart färg/svit)</li>
+                <li><strong>♥ Crimson Hearts</strong> (Röd färg/svit)</li>
+                <li><strong>♦ Diamond Syndicate</strong> (Röd färg/svit)</li>
+                <li><strong>Betalningsregel:</strong> När du landar på ett uppvänt kort som matchar din <em>egen</em> gängfärg/svit är det helt gratis. Landar du däremot på ett kort som tillhör något av de andra tre rivaliserande gängen, måste du omedelbart betala kortets värde (t.ex. en 5:a = $5) till den aktuella spelaren via appen.</li>
                 <li><strong>Damerna (Barerna):</strong> Alla gäng går in gratis på Damerna, men man tvingas <strong>stå över nästa omgång</strong>.</li>
             </ul>
 
@@ -397,8 +363,7 @@
             <ul>
                 <li><strong>Ockupation:</strong> När en Knekt flyttar in på planen placeras den fysiskt ovanpå det kort den landar på och <strong>ersätter kortets funktion helt</strong> så länge den står kvar.</li>
                 <li><strong>Frizon / Fälla:</strong> Att landa på sin <em>egen</em> gängknekt är helt säkert och fungerar som ett <strong>gratisställe</strong>. Om du däremot landar på (eller blir träffad av) en <em>motståndares</em> Knekt blir du omedelbart gripen!</li>
-                <li><strong>Trängselregeln:</strong> Två Knektar får <strong>aldrig stanna på samma ruta</strong>. Däremot har de tillåtelse att passera/gå över varandra under förflyttning.</li>
-                <li><strong>Straff vid gripande:</strong> Du blir av med alla smuggelpengar du bär på fickan (allt över startkapitalet $20) till den Knektens gängkassa, och din pjäs flyttas direkt till den motståndarens Boss-ruta (Fängelset). Slå 4+ för att bryta dig ut vid nästa tur.</li>
+                <li><strong>Straff vid gripande:</strong> Du blir av med alla insamlade smuggelpengar på fickan (allt över startkapitalet $20). Dessa pengar beslagtas och <strong>tillfaller direkt gängbanken hos den spelare vars polis utförde gripandet</strong>. Din pjäs flyttas sedan till den motståndarens Boss-ruta (Fängelset). Slå 4+ för att bryta dig ut vid nästa tur.</li>
             </ul>
 
             <h2>💰 Ekonomi & Seger</h2>
@@ -434,7 +399,8 @@
             { title: "🕵️ Ficktjuv", desc: "Ett snabbt möte i trängseln. Stjäl hälften av fickpengarna ($10) från valfri motståndare som står på samma hälft av spelplanen som du." }
         ];
 
-        let selectedGangId = null;
+        let activePayerId = null;
+        let activeArrestedId = null;
         let isRolling = false;
 
         function updateUI() {
@@ -445,25 +411,15 @@
             }
         }
 
-        function selectGang(id) {
-            selectedGangId = id;
-            document.querySelectorAll('.selector-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.selector-btn[data-gang="${id}"]`).classList.add('active');
-            document.getElementById('action-panel').classList.add('active');
-        }
-
-        function takeLoadFromPanel() {
-            if (!selectedGangId) return;
-            if (players[selectedGangId].bank >= 100) {
-                players[selectedGangId].bank -= 100;
-                players[selectedGangId].pocket += 100;
+        function takeLoad(id) {
+            if (players[id].bank >= 100) {
+                players[id].bank -= 100;
+                players[id].pocket += 100;
                 updateUI();
             } else { alert("Bossens valv är tomt!"); }
         }
 
-        function secureCashFromPanel() {
-            if (!selectedGangId) return;
-            let id = selectedGangId;
+        function secureCash(id) {
             if (players[id].pocket > 20) {
                 let toSecure = players[id].pocket - 20;
                 players[id].secured += toSecure;
@@ -475,23 +431,53 @@
             } else { alert("Du har inga smuggelpengar utöver dina basfickpengar ($20) att säkra!"); }
         }
 
-        function arrestPlayerFromPanel() {
-            if (!selectedGangId) return;
-            players[selectedGangId].pocket = 20; 
-            updateUI();
-            alert(`${players[selectedGangId].name} åkte dit! Pengarna är borta. Slå 4+ för att lämna häktet.`);
+        /* Ny logik för arrestering - välj polisen som ska ha pengarna till sin bank */
+        function arrestPlayer(id) {
+            activeArrestedId = id;
+            const grid = document.getElementById("police-targets");
+            grid.innerHTML = "";
+            
+            for (let pId in players) {
+                if (pId != id) {
+                    let btn = document.createElement("button");
+                    btn.className = "police-btn";
+                    btn.innerText = `👮‍♂️ ${players[pId].name}`;
+                    btn.onclick = function() { executeArrest(pId); };
+                    grid.appendChild(btn);
+                }
+            }
+            document.getElementById("police-overlay").classList.add("active");
         }
 
-        function openPayModalFromPanel() {
-            if (!selectedGangId) return;
-            document.getElementById("pay-title").innerText = `${players[selectedGangId].name} betalar`;
+        function closePoliceModal() { document.getElementById("police-overlay").classList.remove("active"); }
+
+        function executeArrest(policeGangId) {
+            let victim = players[activeArrestedId];
+            let cop = players[policeGangId];
+            
+            if (victim.pocket > 20) {
+                let loot = victim.pocket - 20;
+                cop.bank += loot;
+                victim.pocket = 20;
+                alert(`${victim.name} blev haffad av ${cop.name}! Polisen beslagtog $${loot} och skickade dem till sin gängbank.`);
+            } else {
+                alert(`${victim.name} hade inga smuggelpengar på fickan. Skickas direkt till häktet hos ${cop.name}.`);
+            }
+            
+            closePoliceModal();
+            updateUI();
+        }
+
+        function openPayModal(id) {
+            activePayerId = id;
+            document.getElementById("pay-title").innerText = `${players[id].name} betalar`;
             const select = document.getElementById("pay-target");
             select.innerHTML = ""; 
-            for (let id in players) {
-                if (id != selectedGangId) {
+            for (let pId in players) {
+                if (pId != id) {
                     let opt = document.createElement("option");
-                    opt.value = id;
-                    opt.innerText = players[id].name;
+                    opt.value = pId;
+                    opt.innerText = players[pId].name;
                     select.appendChild(opt);
                 }
             }
@@ -505,14 +491,14 @@
             const amount = parseInt(document.getElementById("pay-amount").value);
             if (isNaN(amount) || amount <= 0) return;
             
-            if (players[selectedGangId].pocket < amount) {
+            if (players[activePayerId].pocket < amount) {
                 alert("Konkurs! Inte tillräckligt på fickan. Du flyttas till ditt Ess med $20.");
-                players[selectedGangId].pocket = 20;
+                players[activePayerId].pocket = 20;
                 closePayModal();
                 updateUI();
                 return;
             }
-            players[selectedGangId].pocket -= amount;
+            players[activePayerId].pocket -= amount;
             players[targetId].pocket += amount;
             updateUI();
             closePayModal();
@@ -556,9 +542,6 @@
                     3: { name: "Iron Clovers (♣)", bank: 300, pocket: 20, secured: 0 },
                     4: { name: "Diamond Syndicate (♦)", bank: 300, pocket: 20, secured: 0 }
                 };
-                selectedGangId = null;
-                document.getElementById('action-panel').classList.remove('active');
-                document.querySelectorAll('.selector-btn').forEach(btn => btn.classList.remove('active'));
                 updateUI();
             }
         }
