@@ -61,7 +61,6 @@
             background-color: var(--gang-color);
         }
 
-        /* Specifika gängfärger via variabler */
         #p1 { --gang-color: var(--spades-color); grid-area: 1 / 1; }
         #p2 { --gang-color: var(--hearts-color); grid-area: 1 / 3; }
         #p3 { --gang-color: var(--clovers-color); grid-area: 3 / 1; }
@@ -178,13 +177,12 @@
             letter-spacing: 2px;
         }
 
-        /* Information / Loggar i mitten på sidorna */
         .side-bar-left { grid-area: 2 / 1; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 14px; }
         .side-bar-right { grid-area: 2 / 3; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 14px; }
         .top-bar { grid-area: 1 / 2; display: flex; align-items: center; justify-content: center; font-weight: bold; letter-spacing: 3px; color: #444; }
-        .bottom-bar { grid-area: 3 / 2; display: flex; align-items: center; justify-content: center; }
+        .bottom-bar { grid-area: 3 / 2; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
-        /* Popups (Händelser & Transaktioner) */
+        /* Overlays / Popups */
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -213,6 +211,21 @@
             text-align: center;
             box-shadow: 0 20px 40px rgba(0,0,0,0.8);
         }
+
+        /* Instruktions-popup (Större format för presentation) */
+        .popup-large {
+            max-width: 800px;
+            height: 85vh;
+            overflow-y: auto;
+            text-align: left;
+            border-color: #3a86ff;
+            padding: 40px;
+        }
+
+        .popup-large h2 { color: #3a86ff; text-transform: uppercase; margin: 20px 0 10px 0; border-bottom: 1px solid #333; padding-bottom: 5px; font-size: 22px;}
+        .popup-large h3 { color: #f5f5f5; font-size: 16px; margin: 15px 0 5px 0; }
+        .popup-large p, .popup-large li { color: #ccc; font-size: 14px; line-height: 1.6; margin-bottom: 10px; }
+        .popup-large ul { padding-left: 20px; }
 
         .popup-dice-badge {
             background: #333;
@@ -251,7 +264,6 @@
             width: 100%;
         }
 
-        /* Transaktionsmeny specifikt */
         .pay-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -281,7 +293,7 @@
 
     <div class="top-bar">THE NOIR SYNDICATE</div>
     <div class="side-bar-left">« IPAD CONTROL ROOM »</div>
-    <div class="side-bar-right" id="version-display">Version 1.2 - GitHub Live</div>
+    <div class="side-bar-right" id="version-display">Version 1.3 - GitHub Live</div>
 
     <div class="player-corner" id="p1">
         <div class="gang-title">♠ Nightspades</div>
@@ -349,6 +361,7 @@
     </div>
 
     <div class="bottom-bar">
+        <button onclick="openRulesModal()" style="background:#1a237e; color:#90caf9; border:1px solid #283593; font-size:11px; padding:5px 15px;">📜 Regler & Presentation</button>
         <button onclick="resetGame()" style="background:#111; border:1px solid #222; font-size:11px; padding:5px 10px;">Nollställ Spel</button>
     </div>
 
@@ -367,8 +380,7 @@
             <div class="pay-grid">
                 <div>
                     <label for="pay-target">Mottagare</label>
-                    <select id="pay-target">
-                        </select>
+                    <select id="pay-target"></select>
                 </div>
                 <div>
                     <label for="pay-amount">Belopp ($)</label>
@@ -382,6 +394,62 @@
         </div>
     </div>
 
+    <div class="overlay" id="rules-overlay">
+        <div class="popup popup-large">
+            <h1 style="color:#3a86ff; text-align:center; font-size:28px; letter-spacing:2px; margin-bottom:5px;">THE NOIR SYNDICATE</h1>
+            <p style="text-align:center; color:#888; font-style:italic;">Officiellt Spelkoncept & Instruktioner</p>
+            
+            <h2>🕵️‍♂️ Översikt & Handling</h2>
+            <p>Staden sover aldrig. Fyra rivaliserande syndikat kämpar om makten på stadens gator. Din uppgift som gängledare är att tvätta och smuggla kapital från din Boss (Kungarna) och säkra pengarna i ditt högkvarter (Essen) – allt medan polisen (Knektarna) patrullerar i skuggorna.</p>
+            
+            <h2>🗺️ Spelplanens Layout (48 Kort)</h2>
+            <p>Kortleken blandas och placeras ut i ett dolt <strong>6x8-rutnät</strong> på bordet med följande fasta placeringar:</p>
+            <ul>
+                <li><strong>Hörnen (Essen):</strong> Varje spelares Huvudkvarter/Safe House.</li>
+                <li><strong>Diagonalt innanför (Kungarna):</strong> Bossen (håller din gängkassa).</li>
+                <li><strong>Mitten (Knektarna):</strong> Polisen patrullerar utanför brädet längs linjerna.</li>
+                <li><strong>Övriga kort (2-10 och Damer):</strong> Blandas och läggs dolda (upp och ner).</li>
+            </ul>
+
+            <h2>🎭 Syndikaten (De fyra gängen)</h2>
+            <ul>
+                <li><strong>♠ Nightspades (Blå):</strong> Härskarna i hamnen.</li>
+                <li><strong>♥ Crimson Hearts (Rosa):</strong> Styr nöjeslivet och klubbarna.</li>
+                <li><strong>♣ Iron Clovers (Grön):</strong> Kontrollerar tung industri och fackförbund.</li>
+                <li><strong>♦ Diamond Syndicate (Gul):</strong> Eleganta finanshajar och penningtvätt.</li>
+            </ul>
+
+            <h2>🎲 Rörelseregler</h2>
+            <ul>
+                <li>Man slår tärningen på iPaden och flyttar det exakta antalet steg (endast horisontellt och vertikalt, <strong>inga diagonala steg</strong>).</li>
+                <li>Du får inte gå tillbaka till samma ruta under samma drag.</li>
+                <li>När du landar på ett dolt kort vänds det upp. Visar kortet en motståndares färg måste du omedelbart betala summan (t.ex. en 5:a = $5) till den spelaren via appen. Egna färger är gratis.</li>
+                <li><strong>Damerna (Barerna):</strong> Alla kommer in gratis, men man dricker för mycket och tvingas <strong>stå över nästa omgång</strong>.</li>
+            </ul>
+
+            <h2>⚔️ Konflikter (Gatustrid)</h2>
+            <p>Om du landar på samma ruta som en motståndare utbryter konflikt! Spelarna slår varsitt slag på iPaden. Vinnaren får bestämma var förloraren ska skickas (t.ex. tillbaka till Högkvarteret om de inte nått sin boss ännu, eller bort från sitt mål).</p>
+
+            <h2>🚨 Polisen (Knektarna) & Fängelset</h2>
+            <p>Om du landar på en fientlig Knekt (eller om den flyttas till dig via en händelse) blir du haffad!</p>
+            <ul>
+                <li>Du blir av med alla smuggelpengar du bär på fickan (allt över startkapitalet $20). Pengarna tillfaller den Knektens Boss.</li>
+                <li>Din pjäs flyttas direkt till den motståndarens Boss-ruta (Fängelset).</li>
+                <li>För att bryta dig ut måste du slå <strong>4 eller högre</strong> på tärningen. Du startar då om i ditt eget huvudkvarter med $20 på fickan.</li>
+            </ul>
+
+            <h2>💰 Ekonomi & Seger</h2>
+            <ul>
+                <li><strong>Startkapital:</strong> Varje spelare har $20 på fickan och $300 hos sin Boss.</li>
+                <li><strong>Smuggling:</strong> När du besöker din Boss plockar du ut $100. Ditt mål är att ta dig till ditt Ess och trycka på "Säkra Ess".</li>
+                <li><strong>Konkurs:</strong> Om du landar på motståndarkort och dina fickpengar tar slut går du i konkurs. Du nollställs till $20 och flyttas direkt tillbaka till ditt Huvudkvarter.</li>
+                <li><strong>Vinst:</strong> Först till <strong>$200 säkrade i sitt Ess</strong> vinner spelet.</li>
+            </ul>
+
+            <button class="popup-btn" onclick="closeRulesModal()" style="background:#3a86ff; color:white; margin-top:20px;">Tillbaka till spelet</button>
+        </div>
+    </div>
+
     <script>
         let players = {
             1: { name: "Nightspades (♠)", bank: 300, pocket: 20, secured: 0 },
@@ -392,7 +460,7 @@
 
         const noirEvents = [
             { title: "🚨 Patrullering", desc: "Du får flytta din egen polis (Knekt) 1 steg. Hamnar den på en motståndare åker denne direkt till din Boss (i häktet)!" },
-            { title: "🚨 Utryckning", desc: "Brådskande larm! Du får flytta din egen polis (Knekt) 2 steg." },
+            { title: "🚨 Utryckning", desc: "Brådskande larm! Du får flytta din egen polis (Knekt) 2 steg på utsidan av brädet." },
             { title: "💵 Mutor inom polisen", desc: "Du har köpt en konstabel. Du får flytta ut valfri motståndares polis (Knekt) till sin ursprungliga startplats i mitten." },
             { title: "📂 Insiderjobb", desc: "Kartorna ritas om. Du får byta plats på två valfria kort av din egen färg ute på spelplanen." },
             { title: "💥 Gatustrid", desc: "Skuggspel i gränderna! Du får byta plats med ett av dina egna kort och en motståndares kort (dock ej kort där det står en polis)." },
@@ -445,15 +513,13 @@
             alert(`Spelaren åkte dit! Alla smuggelpengar över $20 är borta. Slå 4+ för att lämna häktet vid nästa tur.`);
         }
 
-        // Öppna transaktionsfönster
         function openPayModal(payerId) {
             activePayerId = payerId;
             document.getElementById("pay-title").innerText = `${players[payerId].name} betalar`;
             
             const select = document.getElementById("pay-target");
-            select.innerHTML = ""; // Rensa gamla alternativ
+            select.innerHTML = ""; 
             
-            // Fyll på med de andra tre spelarna
             for (let id in players) {
                 if (id != payerId) {
                     let opt = document.createElement("option");
@@ -462,7 +528,6 @@
                     select.appendChild(opt);
                 }
             }
-            
             document.getElementById("pay-overlay").classList.add("active");
         }
 
@@ -471,7 +536,6 @@
             activePayerId = null;
         }
 
-        // Genomför överföringen av pengar
         function executePayment() {
             const targetId = document.getElementById("pay-target").value;
             const amount = parseInt(document.getElementById("pay-amount").value);
@@ -481,24 +545,20 @@
                 return;
             }
             
-            // Kontrollera om betalaren har råd från fickan
             if (players[activePayerId].pocket < amount) {
                 alert("Inte tillräckligt med pengar på fickan! Du skickas tillbaka till ditt Högkvarter.");
-                players[activePayerId].pocket = 20; // Konkursregel: tillbaka till start med $20
+                players[activePayerId].pocket = 20; 
                 closePayModal();
                 updateUI();
                 return;
             }
             
-            // Flytta pengarna
             players[activePayerId].pocket -= amount;
             players[targetId].pocket += amount;
-            
             updateUI();
             closePayModal();
         }
 
-        // Tärningsfunktion
         function rollDice() {
             if (isRolling) return;
             isRolling = true;
@@ -517,7 +577,6 @@
                     dice.innerText = finalResult;
                     isRolling = false;
 
-                    // 35% chans för händelse
                     if (Math.random() < 0.35) {
                         triggerEvent(finalResult);
                     }
@@ -525,7 +584,6 @@
             }, 70);
         }
 
-        // Slumpa händelse (tar nu emot tärningsresultatet som argument)
         function triggerEvent(diceRoll) {
             const randomEvent = noirEvents[Math.floor(Math.random() * noirEvents.length)];
             document.getElementById("event-dice-badge").innerText = `Du slog en ${diceRoll}:a`;
@@ -536,6 +594,14 @@
 
         function closePopup() {
             document.getElementById("event-overlay").classList.remove("active");
+        }
+
+        /* Regelfunktioner */
+        function openRulesModal() {
+            document.getElementById("rules-overlay").classList.add("active");
+        }
+        function closeRulesModal() {
+            document.getElementById("rules-overlay").classList.remove("active");
         }
 
         function resetGame() {
